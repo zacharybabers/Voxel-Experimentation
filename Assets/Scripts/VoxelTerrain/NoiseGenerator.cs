@@ -18,18 +18,11 @@ public class NoiseGenerator : MonoBehaviour
 
    
 
-    private float[,] heightMap()
+    public float[,] heightMap()
     {
         return Noise.GenerateNoiseMap(width, height, seedNumber, noiseScale, noiseOctave, noisePersistence,
             noiseLacunarity, noiseOffset);
     }
 
-    private void Start()
-    {
-        myNoiseMap = heightMap();
-        foreach (float number in myNoiseMap)
-        {
-            print(number);
-        }
-    }
+    
 }
