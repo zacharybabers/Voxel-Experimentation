@@ -12,6 +12,8 @@
           <e p="VoxelTerrain" t="Include">
             <e p="Noise.cs" t="Include" />
             <e p="NoiseGenerator.cs" t="Include" />
+            <e p="VoxelHeightMapGenerator.cs" t="Include" />
+            <e p="VoxelMeshFromHeightMap.cs" t="Include" />
           </e>
         </e>
         <e p="TutorialInfo" t="Include">
