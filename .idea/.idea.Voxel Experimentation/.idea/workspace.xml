@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="3b16b8e0-b793-4b3d-b0c7-fb4b01ebd3b1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel Experimentation/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ExampleAssets/Materials/Paint1G_WAnim_Material.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ExampleAssets/Materials/Paint1G_WAnim_Material.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/VoxelExperimentation.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/VoxelExperimentation.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/VoxelExperimentation.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/VoxelExperimentation.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,12 +37,15 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/NoiseGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Noise.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/NoiseGenerator.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
       </list>
     </option>
   </component>
@@ -76,7 +97,7 @@
       <workItem from="1631252917228" duration="868000" />
       <workItem from="1631768536868" duration="1411000" />
       <workItem from="1631853901303" duration="1690000" />
-      <workItem from="1632453096508" duration="593000" />
+      <workItem from="1632453096508" duration="6090000" />
     </task>
     <servers />
   </component>
@@ -85,6 +106,17 @@
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
