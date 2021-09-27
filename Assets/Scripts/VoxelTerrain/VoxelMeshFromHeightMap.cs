@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class VoxelMeshFromHeightMap : MonoBehaviour
 {
-    
+    [SerializeField] private int[,] heightMap;
+    [SerializeField] private int length = 16;
+    [SerializeField] private int width = 16;
+    [SerializeField] private int height = 128;
+
+    private void Start(){
+        BuildMesh();
+    }
+
+    private void BuildMesh(){
+        ChunkData chunkData = new ChunkData(length, width, height, heightMap);
+    }
 }
 
 public class ChunkData
