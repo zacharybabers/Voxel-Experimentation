@@ -12,7 +12,7 @@ public class CulledMeshBuilder : MonoBehaviour
 
     public List<Vector3> vertexData;
     public List<int> triangleData;
-    public GameObject chunkObject;
+ 
 
     private float timer = 0f;
     
@@ -33,7 +33,7 @@ public class CulledMeshBuilder : MonoBehaviour
         
     }
 
-    public void Build(ChunkData chunkData)
+    public Mesh Build(ChunkData chunkData)
     {
         timer = Time.realtimeSinceStartup;
         
@@ -76,16 +76,11 @@ public class CulledMeshBuilder : MonoBehaviour
         
         mesh.RecalculateNormals();
 
-        Color[] colors = new Color[mesh.vertices.Length];
-        for (int i = 0; i < colors.Length; i++)
-        {
-            colors[i] = Color.green;
-        }
-
-        var meshFilter = chunkObject.AddComponent<MeshFilter>();
-        meshFilter.mesh = mesh;
         
+
         Debug.Log(Time.realtimeSinceStartup - timer);
+        
+        return mesh;
     }
 
     private void CreateQuads(int[,,] chunkArray, int i, int j, int k)

@@ -20,18 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Noise.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Noise.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/NoiseGenerator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/NoiseGenerator.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelHeightMapGenerator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelHeightMapGenerator.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +36,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../NoiseFiguring/Assets/FastNoise Unity/Voxel Engine/VoxelEngineManager.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -51,8 +45,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/ManualMeshBuilder3.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeRender.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
       </list>
     </option>
@@ -104,7 +98,9 @@
       <updated>1634374915281</updated>
       <workItem from="1634374919965" duration="2441000" />
       <workItem from="1634879762233" duration="11279000" />
-      <workItem from="1634954314499" duration="14041000" />
+      <workItem from="1634954314499" duration="14641000" />
+      <workItem from="1635058079592" duration="8455000" />
+      <workItem from="1635144011956" duration="1300000" />
     </task>
     <servers />
   </component>
@@ -123,6 +119,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

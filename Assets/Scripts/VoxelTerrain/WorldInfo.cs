@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class WorldInfo : MonoBehaviour
 {
-    public Dictionary<Vector2, ChunkData> chunkDictionary;
+    public Dictionary<Vector2, ChunkData> loadedChunkDictionary;
+    public Queue<Vector2> chunksToLoad;
+    public ChunkData[] chunkPool;
+    public List<TerrainChunk> chunkObjects;
+
+    [SerializeField] private int chunkPoolSize = 9;
 
     [SerializeField] private FastNoiseUnity fastNoiseUnity;
 
-    private const int chunkSize = 32;
+    public const int chunkSize = 32;
     
     [SerializeField] private CulledMeshBuilder meshBuilder;
     [SerializeField] private Transform chunkParent;
@@ -17,18 +22,25 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private int mapScale;
     [SerializeField] private int mapHeightOnNoise;
 
+    [SerializeField] private Transform targetTransform;
+    [SerializeField] private float drawDistance;
+
     private FastNoise fastNoise;
 
 
     private void Awake()
     {
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
+        loadedChunkDictionary = new Dictionary<Vector2, ChunkData>();
+        chunksToLoad = new Queue<Vector2>();
+        chunkPool = new ChunkData[9];
+        chunkObjects = new List<TerrainChunk>();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 10; j++)
             {
-                getChunkFromCoordinates(new Vector2(i, j));
+                GetChunkFromCoordinates(new Vector2(i, j));
             }
         }
 
@@ -36,31 +48,26 @@ public class WorldInfo : MonoBehaviour
     }
 
 
-    private void getChunkFromCoordinates(Vector2 chunkCoord)
+    private void GetChunkFromCoordinates(Vector2 chunkCoord)
     {
         GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
         var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
         
         
         terrainChunk.CreateChunkData(chunkCoord, GenerateChunkAtlas(chunkCoord));
+        terrainChunk.chunkData.chunkMesh = meshBuilder.Build(terrainChunk.chunkData);
         terrainChunk.chunkCoord = chunkCoord;
         
         chunkObject.transform.position = new Vector3(chunkCoord.x * chunkSize, 0, chunkCoord.y * chunkSize);
         
-        Debug.Log(chunkObject.transform.position);
-
-        meshBuilder.chunkObject = chunkObject;
-        
-        meshBuilder.Build(terrainChunk.chunkData);
-        Debug.Log(chunkObject.transform.position);
-
+        terrainChunk.BuildMesh();
     }
 
     private int[,,] GenerateChunkAtlas(Vector2 chunkCoord)
     {
         int[,,] ints = new int[chunkSize,chunkSize,chunkSize];
 
-        int[,] heightMap = generateHeightMap(chunkCoord);
+        int[,] heightMap = GenerateHeightMap(chunkCoord);
 
         for (int i = 0; i < chunkSize; i++)
         {
@@ -80,7 +87,7 @@ public class WorldInfo : MonoBehaviour
 
     }
 
-    private int[,] generateHeightMap(Vector2 chunkCoord)
+    private int[,] GenerateHeightMap(Vector2 chunkCoord)
     {
         int[,] initMap = new int[chunkSize,chunkSize];
 
@@ -96,6 +103,20 @@ public class WorldInfo : MonoBehaviour
         }
 
         return initMap;
+    }
+
+    public void CreateChunkData(Vector2 chunkCoordinate)
+    {
+        var chunkData = new ChunkData(GenerateChunkAtlas(chunkCoordinate), chunkCoordinate, chunkSize);
+        chunkData.chunkMesh = meshBuilder.Build(chunkData);
+        loadedChunkDictionary.Add(chunkData.chunkCoord, chunkData);
+    }
+
+    public void UpdateChunksToLoad()
+    {
+        var viewDistSquared = drawDistance * drawDistance;
+        
+        //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
     }
 
 
