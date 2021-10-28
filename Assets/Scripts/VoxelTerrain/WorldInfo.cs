@@ -25,7 +25,7 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float drawDistance;
 
-    private FastNoise fastNoise;
+    
 
 
     private void Awake()
@@ -33,7 +33,7 @@ public class WorldInfo : MonoBehaviour
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         loadedChunkDictionary = new Dictionary<Vector2, ChunkData>();
         chunksToLoad = new Queue<Vector2>();
-        chunkPool = new ChunkData[9];
+        chunkPool = new ChunkData[chunkPoolSize];
         chunkObjects = new List<TerrainChunk>();
 
         for (int i = 0; i < 10; i++)
@@ -95,10 +95,10 @@ public class WorldInfo : MonoBehaviour
         {
             for (int j = 0; j < chunkSize; j++)
             {
-               float temp = fastNoiseUnity.fastNoise.GetNoise(chunkSize * chunkCoord.x + i, chunkSize * chunkCoord.y + j) * (mapScale / 2);
+               float temp = fastNoiseUnity.fastNoise.GetNoise(chunkSize * chunkCoord.x + i, chunkSize * chunkCoord.y + j) * (mapScale / 2f);
                temp += (mapScale / 2f);
-               int itemp = (int) temp;
-               initMap[i, j] = itemp;
+               int intTemp = (int) temp;
+               initMap[i, j] = intTemp;
             }
         }
 
@@ -115,8 +115,24 @@ public class WorldInfo : MonoBehaviour
     public void UpdateChunksToLoad()
     {
         var viewDistSquared = drawDistance * drawDistance;
-        
+
+        int chunksInLinearDist = (int) drawDistance / chunkSize;
+
         //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
+        for (int i = 0; i < chunksInLinearDist; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
+        {
+            for (int j = 0; j < chunksInLinearDist; j++)
+            {
+                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)))
+                {
+                    var distSquared = Mathf.Pow((float) i * chunkSize, 2) + Mathf.Pow((float) j * chunkSize, 2);
+                    if (distSquared < viewDistSquared)
+                    {
+                        chunksToLoad.Enqueue(new Vector2(i, j));
+                    }
+                }
+            }
+        }
     }
 
 
