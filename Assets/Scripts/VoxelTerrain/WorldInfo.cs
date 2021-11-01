@@ -25,6 +25,11 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float drawDistance;
 
+    private float scanStep = 0f;
+    [SerializeField] private float scanLength = 10f;
+    
+    
+
     
 
 
@@ -119,7 +124,7 @@ public class WorldInfo : MonoBehaviour
         int chunksInLinearDist = (int) drawDistance / chunkSize;
 
         //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
-        for (int i = 0; i < chunksInLinearDist; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
+        for (int i = (int) ((scanStep / scanLength) *  chunksInLinearDist); i < (int) ((scanStep + 1) / scanLength) * chunksInLinearDist; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
         {
             for (int j = 0; j < chunksInLinearDist; j++)
             {
@@ -132,6 +137,11 @@ public class WorldInfo : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if (scanStep >= scanLength - 1)
+        {
+            scanStep = 0f;
         }
     }
 
