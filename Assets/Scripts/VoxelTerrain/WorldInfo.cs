@@ -16,7 +16,8 @@ public class WorldInfo : MonoBehaviour
 
     public const int chunkSize = 32;
     
-    [SerializeField] private CulledMeshBuilder meshBuilder;
+    private CulledMeshBuilder meshBuilder;
+    
     [SerializeField] private Transform chunkParent;
     [SerializeField] private GameObject chunkPrefab;
     [SerializeField] private int mapScale;
@@ -41,22 +42,17 @@ public class WorldInfo : MonoBehaviour
         chunkPool = new ChunkData[chunkPoolSize];
         chunkObjects = new List<TerrainChunk>();
 
-        for (int i = 0; i < 10; i++)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                GetChunkFromCoordinates(new Vector2(i, j));
-            }
-        }
+       InitializeWorld();
 
        
     }
 
 
-    private void GetChunkFromCoordinates(Vector2 chunkCoord)
+    private ChunkData GetChunkFromCoordinates(Vector2 chunkCoord)
     {
         GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
         var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
+        chunkObjects.Add(terrainChunk);
         
         
         terrainChunk.CreateChunkData(chunkCoord, GenerateChunkAtlas(chunkCoord));
@@ -66,6 +62,8 @@ public class WorldInfo : MonoBehaviour
         chunkObject.transform.position = new Vector3(chunkCoord.x * chunkSize, 0, chunkCoord.y * chunkSize);
         
         terrainChunk.BuildMesh();
+
+        return terrainChunk.chunkData;
     }
 
     private int[,,] GenerateChunkAtlas(Vector2 chunkCoord)
@@ -117,6 +115,32 @@ public class WorldInfo : MonoBehaviour
         loadedChunkDictionary.Add(chunkData.chunkCoord, chunkData);
     }
 
+    public void FindInitialChunksToLoad()
+    {
+        var viewDistSquared = drawDistance * drawDistance;
+
+        int currentChunkX = (int) targetTransform.position.x / chunkSize;
+        int currentChunkY = (int) targetTransform.position.z / chunkSize;
+
+        int chunksInLinearDist = (int) drawDistance / chunkSize;
+
+        //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
+        for (int i = currentChunkX - chunksInLinearDist; i <= currentChunkX + chunksInLinearDist; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
+        {
+            for (int j = currentChunkY - chunksInLinearDist; j <= currentChunkY + chunksInLinearDist; j++)
+            {
+                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)))
+                {
+                    var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2);
+                    if (distSquared < viewDistSquared)
+                    {
+                        chunksToLoad.Enqueue(new Vector2(i, j));
+                    }
+                }
+            }
+        }
+    }
+    
     public void UpdateChunksToLoad()
     {
         var viewDistSquared = drawDistance * drawDistance;
@@ -144,6 +168,23 @@ public class WorldInfo : MonoBehaviour
             scanStep = 0f;
         }
     }
+
+    public void InitializeWorld()
+    {
+        FindInitialChunksToLoad();
+        
+        //initialize chunk objects
+        int initialNumChunks = chunksToLoad.Count;
+        
+        for (int i = 0; i < initialNumChunks; i++)
+        {
+            var chunkLoading = chunksToLoad.Dequeue();
+            var data = GetChunkFromCoordinates(chunkLoading);
+            loadedChunkDictionary.Add(data.chunkCoord, data);
+        }
+    }
+    
+    
 
 
 

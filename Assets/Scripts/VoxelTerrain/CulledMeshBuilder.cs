@@ -78,7 +78,7 @@ public class CulledMeshBuilder : MonoBehaviour
 
         
 
-        Debug.Log(Time.realtimeSinceStartup - timer);
+        //Debug.Log(Time.realtimeSinceStartup - timer);
         
         return mesh;
     }

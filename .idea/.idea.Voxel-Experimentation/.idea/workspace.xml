@@ -25,6 +25,9 @@
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,8 +50,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeRender.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
       </list>
     </option>
   </component>
@@ -107,6 +110,8 @@
       <workItem from="1635366354991" duration="1590000" />
       <workItem from="1635406102123" duration="3579000" />
       <workItem from="1635760089791" duration="617000" />
+      <workItem from="1635912513301" duration="1266000" />
+      <workItem from="1636018121684" duration="7601000" />
     </task>
     <servers />
   </component>

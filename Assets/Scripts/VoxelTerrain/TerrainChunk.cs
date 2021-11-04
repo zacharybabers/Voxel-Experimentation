@@ -6,6 +6,7 @@ public class TerrainChunk : MonoBehaviour
 {
     public ChunkData chunkData;
     public Vector2 chunkCoord;
+    public bool loaded = true;
 
     public void CreateChunkData(Vector2 chunkCoordinate, int[,,] voxelAtlas)
     {
@@ -25,6 +26,8 @@ public class TerrainChunk : MonoBehaviour
         var meshFilter = gameObject.GetComponent<MeshFilter>();
         meshFilter.mesh = chunkData.chunkMesh;
     }
+
+  
 }
 
 
