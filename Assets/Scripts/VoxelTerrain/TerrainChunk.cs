@@ -12,6 +12,7 @@ public class TerrainChunk : MonoBehaviour
     {
         chunkCoord = chunkCoordinate;
         chunkData = new ChunkData(voxelAtlas, chunkCoordinate, 32);
+        chunkData.chunkMesh = WorldInfo.meshBuilder.Build(chunkData);
     }
 
     public void BuildMesh()
