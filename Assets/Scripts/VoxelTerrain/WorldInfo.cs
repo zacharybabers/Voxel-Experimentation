@@ -25,14 +25,6 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float drawDistance;
 
-    private float scanStep = 0f;
-    [SerializeField] private float scanLength = 10f;
-    
-    
-
-    
-
-
     private void Awake()
     {
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
@@ -43,19 +35,21 @@ public class WorldInfo : MonoBehaviour
        InitializeWorld();
     }
 
-   /* private void Update()
+    private void Update()
     {
         UpdateChunks();
-    } */
+    } 
 
     private TerrainChunk GetChunkFromCoordinates(Vector2 chunkCoord)
     {
         GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
         var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
-
+        chunkObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
+        
         terrainChunk.CreateChunkData(chunkCoord, GenerateChunkAtlas(chunkCoord));
         terrainChunk.chunkData.chunkMesh = meshBuilder.Build(terrainChunk.chunkData);
         terrainChunk.chunkCoord = chunkCoord;
+        
         
         chunkObject.transform.position = new Vector3(chunkCoord.x * chunkSize, 0, chunkCoord.y * chunkSize);
         
@@ -120,7 +114,7 @@ public class WorldInfo : MonoBehaviour
         {
             for (int j = currentChunkY - chunksInLinearDist; j <= currentChunkY + chunksInLinearDist; j++)
             {
-                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)))
+                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)) && !chunksToLoad.Contains(new Vector2(i, j)))
                 {
                     var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2);
                     if (distSquared < viewDistSquared)
@@ -129,43 +123,13 @@ public class WorldInfo : MonoBehaviour
                     }
                 }
             }
-        }
-    }
-    
-    public void UpdateChunksToLoad()
-    {
-        var viewDistSquared = drawDistance * drawDistance;
-
-        int currentChunkX = (int) targetTransform.position.x / chunkSize;
-        int currentChunkY = (int) targetTransform.position.y / chunkSize;
-
-        int chunksInLinearDist = (int) drawDistance / chunkSize;
-
-        //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
-        for (int i = currentChunkX - chunksInLinearDist + ((int) (scanStep / scanLength) *  chunksInLinearDist); i <= currentChunkX - chunksInLinearDist + ((int) ((scanStep + 1) / scanLength) * chunksInLinearDist); i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
-        {
-            for (int j = currentChunkY - chunksInLinearDist; j <= chunksInLinearDist + currentChunkY; j++)
-            {
-                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)))
-                {
-                    var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2);
-                    if (distSquared < viewDistSquared)
-                    {
-                        chunksToLoad.Enqueue(new Vector2(i, j));
-                    }
-                }
-            }
-        }
-
-        if (scanStep >= scanLength - 1)
-        {
-            scanStep = 0f;
         }
     }
 
     public void InitializeWorld()
     {
         FindInitialChunksToLoad();
+       
         
         //initialize chunk objects
         int initialNumChunks = chunksToLoad.Count;
@@ -181,30 +145,41 @@ public class WorldInfo : MonoBehaviour
 
     public void UpdateChunks()
     {
-        UpdateChunksToLoad();
-        PoolAsNeeded();
+        FindInitialChunksToLoad();
+        
+        if (chunksToLoad.Count > 0)
+        {
+            RefreshOneChunk();
+        }
+
+        
+      
+
     }
 
-    public void PoolAsNeeded() //determine number of chunks that will be loaded, iterate through loaded chunk dictionary and add chunks that will be replaced to chunk pool
+    public void RefreshOneChunk()
     {
-       
-        int numChunksToLoad = chunksToLoad.Count;
-        int counter = 0;
-        
         //calculate view distance, check which chunks are outside of it, then add them to pool
         var viewDistSquared = drawDistance * drawDistance;
         int currentChunkX = (int) targetTransform.position.x / chunkSize;
-        int currentChunkY = (int) targetTransform.position.y / chunkSize;
+        int currentChunkY = (int) targetTransform.position.z / chunkSize;
+        
+        
+        TerrainChunk[] terrainChunks = new TerrainChunk[loadedChunkDictionary.Count];
+        loadedChunkDictionary.Values.CopyTo(terrainChunks, 0);
 
-
-        foreach (KeyValuePair<Vector2, TerrainChunk> chunk in loadedChunkDictionary)
+        for (int chunkNum = 0; chunkNum < loadedChunkDictionary.Count; chunkNum++)
         {
-            var distSquared = Mathf.Pow((float) (chunk.Key.x - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (chunk.Key.y - currentChunkY) * chunkSize, 2);
+            var foundChunkToUnload = false;
+            
+            var distSquared = Mathf.Pow((float) (terrainChunks[chunkNum].chunkCoord.x - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (terrainChunks[chunkNum].chunkCoord.y - currentChunkY) * chunkSize, 2);
             if (distSquared >= viewDistSquared)
             {
-                var terrainChunk = chunk.Value;
+                var terrainChunk = terrainChunks[chunkNum];
+                
+                var originalCoord = terrainChunk.chunkCoord;
+                
                 chunkPool.Add(terrainChunk.chunkData);
-
                 if (chunkPool.Count > chunkPoolSize)
                 {
                     chunkPool.RemoveAt(0);
@@ -212,36 +187,46 @@ public class WorldInfo : MonoBehaviour
 
                 var chunkToLoad = chunksToLoad.Dequeue();
 
-                foreach (var chunkData in chunkPool) //todo figure out how to remove while still in loop
+                bool gotChunk = false;
+
+                for (int i = chunkPool.Count - 1; i >= 0; i--)
                 {
-                    if (chunkData.chunkCoord == chunkToLoad)
+                    bool finished = false;
+                    if (chunkPool[i].chunkCoord.Equals(chunkToLoad))
                     {
-                        terrainChunk.chunkData = chunkData;
-                        chunkPool.Remove(chunkData);
+                        terrainChunk.SetChunkData(chunkPool[i]);
+                        chunkPool.RemoveAt(i);
+                        gotChunk = true;
+                        finished = true;
+                    }
+
+                    if (finished)
+                    {
+                        break;
                     }
                 }
-                
-                terrainChunk.CreateChunkData(chunkToLoad, GenerateChunkAtlas(chunkToLoad));
+
+                if (!gotChunk)
+                {
+                    terrainChunk.CreateChunkData(chunkToLoad, GenerateChunkAtlas(chunkToLoad));
+                }
+
                 terrainChunk.UpdatePositionAndMesh();
 
-                counter++;
-            }
+                terrainChunk.gameObject.name =
+                    "chunk (" + terrainChunk.chunkCoord.x + ", " + terrainChunk.chunkCoord.y + ")";
 
-            if (counter >= numChunksToLoad) //return if we're done pooling chunks to be unloaded
+                loadedChunkDictionary.Add(chunkToLoad, terrainChunk);
+                loadedChunkDictionary.Remove(originalCoord);
+
+                foundChunkToUnload = true;
+            }
+            
+            if (foundChunkToUnload)
             {
-                return;
+                break;
             }
 
         }
     }
-    
-    
-
-
-
-
-
-
-
-
 }

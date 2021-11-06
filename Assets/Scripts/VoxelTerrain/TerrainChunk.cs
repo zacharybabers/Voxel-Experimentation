@@ -15,6 +15,12 @@ public class TerrainChunk : MonoBehaviour
         chunkData.chunkMesh = WorldInfo.meshBuilder.Build(chunkData);
     }
 
+    public void SetChunkData(ChunkData chunkData)
+    {
+        this.chunkData = chunkData;
+        chunkCoord = chunkData.chunkCoord;
+    }
+
     public void BuildMesh()
     {
         var meshFilter = gameObject.AddComponent<MeshFilter>();
@@ -26,6 +32,9 @@ public class TerrainChunk : MonoBehaviour
         transform.position = new Vector3(chunkCoord.x * chunkData.size, 0, chunkCoord.y * chunkData.size);
         var meshFilter = gameObject.GetComponent<MeshFilter>();
         meshFilter.mesh = chunkData.chunkMesh;
+        this.chunkCoord = chunkData.chunkCoord;
+
+        //Debug.Log("Updating Chunk at new coord (" + chunkCoord.x + ", " + chunkCoord.y + ") to position (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
     }
 
   
