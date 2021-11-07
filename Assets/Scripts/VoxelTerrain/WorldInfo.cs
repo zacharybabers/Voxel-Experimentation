@@ -124,6 +124,25 @@ public class WorldInfo : MonoBehaviour
                 }
             }
         }
+        
+        var myChunk = new Vector2(currentChunkX, currentChunkY);
+
+        if (chunksToLoad.Contains(myChunk) && chunksToLoad.Peek() != myChunk)
+        {
+            List<Vector2> tempList = new List<Vector2>();
+            tempList.Add(myChunk);
+            tempList.AddRange(chunksToLoad);
+            var index = 0;
+            for (int i = 1; i < tempList.Count; i++)
+            {
+                if (tempList[i].Equals(myChunk))
+                {
+                    index = i;
+                }
+            }
+            tempList.RemoveAt(index);
+            chunksToLoad = new Queue<Vector2>(tempList);
+        }
     }
 
     public void InitializeWorld()
@@ -151,11 +170,8 @@ public class WorldInfo : MonoBehaviour
         {
             RefreshOneChunk();
         }
-
-        
-      
-
     }
+    
 
     public void RefreshOneChunk()
     {
