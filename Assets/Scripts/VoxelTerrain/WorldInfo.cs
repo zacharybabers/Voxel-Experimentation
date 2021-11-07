@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WorldInfo : MonoBehaviour
 {
-    public Dictionary<Vector2, TerrainChunk> loadedChunkDictionary;
-    public Queue<Vector2> chunksToLoad;
+    public Dictionary<Vector3, TerrainChunk> loadedChunkDictionary;
+    public Queue<Vector3> chunksToLoad;
     public List<ChunkData> chunkPool;
 
     [SerializeField] private int chunkPoolSize = 9;
@@ -28,8 +28,8 @@ public class WorldInfo : MonoBehaviour
     private void Awake()
     {
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
-        loadedChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-        chunksToLoad = new Queue<Vector2>();
+        loadedChunkDictionary = new Dictionary<Vector3, TerrainChunk>();
+        chunksToLoad = new Queue<Vector3>();
         chunkPool = new List<ChunkData>();
         
        InitializeWorld();
@@ -40,7 +40,7 @@ public class WorldInfo : MonoBehaviour
         UpdateChunks();
     } 
 
-    private TerrainChunk GetChunkFromCoordinates(Vector2 chunkCoord)
+    private TerrainChunk GetChunkFromCoordinates(Vector3 chunkCoord)
     {
         GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
         var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
@@ -51,14 +51,15 @@ public class WorldInfo : MonoBehaviour
         terrainChunk.chunkCoord = chunkCoord;
         
         
-        chunkObject.transform.position = new Vector3(chunkCoord.x * chunkSize, 0, chunkCoord.y * chunkSize);
+        chunkObject.transform.position = new Vector3(chunkCoord.x * chunkSize, chunkCoord.z * chunkSize, chunkCoord.y * chunkSize);
         
         terrainChunk.BuildMesh();
 
         return terrainChunk;
     }
+    
 
-    private int[,,] GenerateChunkAtlas(Vector2 chunkCoord)
+    private int[,,] GenerateChunkAtlas(Vector3 chunkCoord)
     {
         int[,,] ints = new int[chunkSize,chunkSize,chunkSize];
 
@@ -82,7 +83,7 @@ public class WorldInfo : MonoBehaviour
 
     }
 
-    private int[,] GenerateHeightMap(Vector2 chunkCoord)
+    private int[,] GenerateHeightMap(Vector3 chunkCoord)
     {
         int[,] initMap = new int[chunkSize,chunkSize];
 
@@ -99,7 +100,7 @@ public class WorldInfo : MonoBehaviour
 
         return initMap;
     }
-    
+
     public void FindInitialChunksToLoad()
     {
         var viewDistSquared = drawDistance * drawDistance;
@@ -114,22 +115,22 @@ public class WorldInfo : MonoBehaviour
         {
             for (int j = currentChunkY - chunksInLinearDist; j <= currentChunkY + chunksInLinearDist; j++)
             {
-                if (!loadedChunkDictionary.ContainsKey(new Vector2(i, j)) && !chunksToLoad.Contains(new Vector2(i, j)))
+                if (!loadedChunkDictionary.ContainsKey(new Vector3(i, j, 0)) && !chunksToLoad.Contains(new Vector3(i, j, 0)))
                 {
                     var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2);
                     if (distSquared < viewDistSquared)
                     {
-                        chunksToLoad.Enqueue(new Vector2(i, j));
+                        chunksToLoad.Enqueue(new Vector3(i, j, 0));
                     }
                 }
             }
         }
         
-        var myChunk = new Vector2(currentChunkX, currentChunkY);
+        var myChunk = new Vector3(currentChunkX, currentChunkY, 0);
 
         if (chunksToLoad.Contains(myChunk) && chunksToLoad.Peek() != myChunk)
         {
-            List<Vector2> tempList = new List<Vector2>();
+            List<Vector3> tempList = new List<Vector3>();
             tempList.Add(myChunk);
             tempList.AddRange(chunksToLoad);
             var index = 0;
@@ -141,7 +142,7 @@ public class WorldInfo : MonoBehaviour
                 }
             }
             tempList.RemoveAt(index);
-            chunksToLoad = new Queue<Vector2>(tempList);
+            chunksToLoad = new Queue<Vector3>(tempList);
         }
     }
 
