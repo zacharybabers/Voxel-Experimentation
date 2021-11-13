@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535058421}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 187, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -424,7 +424,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c094e8e5c0ebbee4eb9b3708fd553575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unloadedChunks: []
   chunkPoolSize: 9
+  nonLoadedChunkSize: 9
   fastNoiseUnity: {fileID: 682102886}
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}

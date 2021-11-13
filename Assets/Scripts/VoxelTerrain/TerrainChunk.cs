@@ -23,7 +23,7 @@ public class TerrainChunk : MonoBehaviour
 
     public void BuildMesh()
     {
-        var meshFilter = gameObject.AddComponent<MeshFilter>();
+        var meshFilter = gameObject.GetComponent<MeshFilter>();
         meshFilter.mesh = chunkData.chunkMesh;
     }
 
@@ -33,8 +33,21 @@ public class TerrainChunk : MonoBehaviour
         var meshFilter = gameObject.GetComponent<MeshFilter>();
         meshFilter.mesh = chunkData.chunkMesh;
         this.chunkCoord = chunkData.chunkCoord;
+        gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
 
         //Debug.Log("Updating Chunk at new coord (" + chunkCoord.x + ", " + chunkCoord.y + ") to position (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
+    }
+
+    public void SetUnloaded()
+    {
+        this.loaded = false; 
+        gameObject.SetActive(false);
+    }
+
+    public void SetLoaded()
+    {
+        this.loaded = true;
+        gameObject.SetActive(true);
     }
 
   

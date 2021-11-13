@@ -23,8 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +40,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/F2625FD8-44AA-4DD5-B6A3-882F24F14D79/e2/e1667c72/Void.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../NoiseFiguring/Assets/FastNoise Unity/Voxel Engine/VoxelEngineManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../NoiseFiguring/Assets/FastNoise Unity/Voxel Engine/VoxelEngineManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -115,7 +118,8 @@
       <workItem from="1636043888849" duration="4305000" />
       <workItem from="1636079995999" duration="4307000" />
       <workItem from="1636176049343" duration="12426000" />
-      <workItem from="1636270104852" duration="909000" />
+      <workItem from="1636270104852" duration="4260000" />
+      <workItem from="1636807300351" duration="6712000" />
     </task>
     <servers />
   </component>
@@ -145,5 +149,9 @@
       <screen x="-1920" y="362" width="1920" height="1040" />
     </state>
     <state x="-1855" y="362" width="1871" height="1127" key="dock-window-1/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1634956383533" />
+    <state x="-1293" y="414" width="666" height="936" key="find.popup" timestamp="1636818829469">
+      <screen x="-1920" y="362" width="1920" height="1040" />
+    </state>
+    <state x="-1293" y="414" width="666" height="936" key="find.popup/-1920.362.1920.1040/0.0.2560.1400@-1920.362.1920.1040" timestamp="1636818829469" />
   </component>
 </project>
