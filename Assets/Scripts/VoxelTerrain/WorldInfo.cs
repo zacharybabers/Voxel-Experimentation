@@ -13,16 +13,15 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private int chunkPoolSize = 9;
     [SerializeField] private int nonLoadedChunkSize = 9;
 
-    [SerializeField] private FastNoiseUnity fastNoiseUnity;
-
+   
     public const int chunkSize = 32;
 
     public static CulledMeshBuilder meshBuilder;
+    public static TerrainGenerator terrainGenerator;
 
     [SerializeField] private Transform chunkParent;
     [SerializeField] private GameObject chunkPrefab;
-    [SerializeField] private int mapScale;
-    [SerializeField] private int mapHeightOnNoise;
+  
 
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float drawDistance;
@@ -30,6 +29,7 @@ public class WorldInfo : MonoBehaviour
     private void Awake()
     {
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
+        terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, TerrainChunk>();
         chunksToLoad = new Queue<Vector3>();
         chunkPool = new List<ChunkData>();
@@ -56,7 +56,7 @@ public class WorldInfo : MonoBehaviour
         var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
         chunkObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
 
-        terrainChunk.CreateChunkData(chunkCoord, GenerateChunkAtlas(chunkCoord));
+        terrainChunk.CreateChunkData(chunkCoord, terrainGenerator.GenerateChunkAtlas(chunkCoord));
         terrainChunk.chunkData.chunkMesh = meshBuilder.Build(terrainChunk.chunkData);
         terrainChunk.chunkCoord = chunkCoord;
 
@@ -70,48 +70,7 @@ public class WorldInfo : MonoBehaviour
     }
 
 
-    private int[,,] GenerateChunkAtlas(Vector3 chunkCoord)
-    {
-        int[,,] ints = new int[chunkSize, chunkSize, chunkSize];
-
-        int[,] heightMap = GenerateHeightMap(chunkCoord);
-
-        for (int i = 0; i < chunkSize; i++)
-        {
-            for (int j = 0; j < chunkSize; j++)
-            {
-                for (int k = mapHeightOnNoise; k < heightMap[i, j]; k++)
-                {
-                    int counter = k - mapHeightOnNoise;
-
-                    ints[i, j, counter] = 1;
-                }
-            }
-        }
-
-        return ints;
-    }
-
-    private int[,] GenerateHeightMap(Vector3 chunkCoord)
-    {
-        int[,] initMap = new int[chunkSize, chunkSize];
-
-        for (int i = 0; i < chunkSize; i++)
-        {
-            for (int j = 0; j < chunkSize; j++)
-            {
-                float temp =
-                    fastNoiseUnity.fastNoise.GetNoise(chunkSize * chunkCoord.x + i, chunkSize * chunkCoord.y + j) *
-                    (mapScale / 2f);
-                temp += (mapScale / 2f);
-                int intTemp = (int) temp;
-                initMap[i, j] = intTemp;
-            }
-        }
-
-        return initMap;
-    }
-
+  
     public void FindInitialChunksToLoad()
     {
         var viewDistSquared = drawDistance * drawDistance;
@@ -257,7 +216,7 @@ public class WorldInfo : MonoBehaviour
 
         if (!gotChunk)
         {
-            terrainChunk.CreateChunkData(chunkToLoad, GenerateChunkAtlas(chunkToLoad));
+            terrainChunk.CreateChunkData(chunkToLoad, terrainGenerator.GenerateChunkAtlas(chunkToLoad));
         }
 
         terrainChunk.SetLoaded();

@@ -31,10 +31,12 @@
           <e p="DictionTest.cs" t="Include" />
           <e p="SimpleCameraController.cs" t="Include" />
           <e p="VoxelTerrain" t="Include">
+            <e p="Biome.cs" t="Include" />
             <e p="CubeRender.cs" t="Include" />
             <e p="CulledMeshBuilder.cs" t="Include" />
             <e p="StaticCulledMeshBuilder.cs" t="Include" />
             <e p="TerrainChunk.cs" t="Include" />
+            <e p="TerrainGenerator.cs" t="Include" />
             <e p="WorldInfo.cs" t="Include" />
           </e>
         </e>

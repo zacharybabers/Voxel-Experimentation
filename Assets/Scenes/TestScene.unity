@@ -372,7 +372,7 @@ GameObject:
   m_Component:
   - component: {fileID: 682102888}
   - component: {fileID: 682102887}
-  - component: {fileID: 682102886}
+  - component: {fileID: 682102889}
   m_Layer: 0
   m_Name: WorldManager
   m_TagString: Untagged
@@ -380,13 +380,97 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &682102886
+--- !u!114 &682102887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682102885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c094e8e5c0ebbee4eb9b3708fd553575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unloadedChunks: []
+  chunkPoolSize: 9
+  nonLoadedChunkSize: 9
+  chunkParent: {fileID: 581200784}
+  chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
+  targetTransform: {fileID: 535058424}
+  drawDistance: 500
+--- !u!4 &682102888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682102885}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 21.34095, y: 7.3797684, z: 16.011944}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1495421054}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &682102889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682102885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6526d0da1b6f9b44a2232292782c328, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biome: {fileID: 1495421052}
+--- !u!1 &1495421051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495421054}
+  - component: {fileID: 1495421052}
+  - component: {fileID: 1495421053}
+  m_Layer: 0
+  m_Name: Biome 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1495421052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d77734ce55647e84f9483049f31efd53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additiveFastNoises:
+  - {fileID: 1495421053}
+  weights:
+  - 1
+  multiplicativeFastNoises: []
+  groundLevel: 0
+  globalScale: 32
+--- !u!114 &1495421053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
@@ -412,39 +496,17 @@ MonoBehaviour:
   fractalSettingsFold: 1
   cellularSettingsFold: 0
   positionWarpSettingsFold: 0
---- !u!114 &682102887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682102885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c094e8e5c0ebbee4eb9b3708fd553575, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unloadedChunks: []
-  chunkPoolSize: 9
-  nonLoadedChunkSize: 9
-  fastNoiseUnity: {fileID: 682102886}
-  chunkParent: {fileID: 581200784}
-  chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
-  mapScale: 32
-  mapHeightOnNoise: 0
-  targetTransform: {fileID: 535058424}
-  drawDistance: 500
---- !u!4 &682102888
+--- !u!4 &1495421054
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682102885}
+  m_GameObject: {fileID: 1495421051}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.34095, y: 7.3797684, z: 16.011944}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 682102888}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
