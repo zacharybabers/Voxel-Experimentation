@@ -394,11 +394,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unloadedChunks: []
   chunkPoolSize: 9
-  nonLoadedChunkSize: 9
+  nonLoadedChunkSize: 900
+  chunksPerFrame: 5
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
   targetTransform: {fileID: 535058424}
-  drawDistance: 500
+  drawDistance: 350
 --- !u!4 &682102888
 Transform:
   m_ObjectHideFlags: 0
@@ -460,7 +461,7 @@ MonoBehaviour:
   additiveFastNoises:
   - {fileID: 1495421053}
   weights:
-  - 1
+  - 1.7
   multiplicativeFastNoises: []
   groundLevel: 0
   globalScale: 32

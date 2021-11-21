@@ -62,7 +62,7 @@ public class Biome : MonoBehaviour
             {
                 for (int k = 0; k < WorldInfo.chunkSize; k++)
                 {
-                    if (k <= heightMap[i, j])
+                    if (chunkCoord.z * WorldInfo.chunkSize + k <= heightMap[i, j])
                     {
                         chunkAtlas[i, j, k] = 1;
                     }

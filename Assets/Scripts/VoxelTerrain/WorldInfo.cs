@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WorldInfo : MonoBehaviour
@@ -12,6 +13,7 @@ public class WorldInfo : MonoBehaviour
 
     [SerializeField] private int chunkPoolSize = 9;
     [SerializeField] private int nonLoadedChunkSize = 9;
+    [SerializeField] private int chunksPerFrame = 5;
 
    
     public const int chunkSize = 32;
@@ -38,7 +40,7 @@ public class WorldInfo : MonoBehaviour
         {
             GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
             var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
-            terrainChunk.SetLoaded();
+            terrainChunk.SetUnloaded();
             unloadedChunks.Add(terrainChunk);
         }
 
@@ -82,22 +84,23 @@ public class WorldInfo : MonoBehaviour
         int chunksInLinearDist = (int) drawDistance / chunkSize;
 
         //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
-        for (int i = currentChunkX - chunksInLinearDist;
-            i <= currentChunkX + chunksInLinearDist;
-            i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
+        for (int i = currentChunkX - chunksInLinearDist; i <= currentChunkX + chunksInLinearDist; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
         {
             for (int j = currentChunkY - chunksInLinearDist; j <= currentChunkY + chunksInLinearDist; j++)
             {
-                if (!loadedChunkDictionary.ContainsKey(new Vector3(i, j, 0)) &&
-                    !chunksToLoad.Contains(new Vector3(i, j, 0)))
+                for (int k = currentChunkZ - chunksInLinearDist; k <= currentChunkZ + chunksInLinearDist; k++)
                 {
-                    var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) +
-                                      Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2) + Mathf.Pow((float) (0 - currentChunkZ) * chunkSize, 2);
-                    if (distSquared < viewDistSquared)
+                    if (!loadedChunkDictionary.ContainsKey(new Vector3(i, j, k)) && !chunksToLoad.Contains(new Vector3(i, j, k)))
                     {
-                        chunksToLoad.Enqueue(new Vector3(i, j, 0));
+                        var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2) + Mathf.Pow((float) (k - currentChunkZ) * chunkSize, 2);
+                    
+                        if (distSquared < viewDistSquared && k > -1)
+                        {
+                            chunksToLoad.Enqueue(new Vector3(i, j, k));
+                        }
                     }
                 }
+                
             }
         }
 
@@ -144,12 +147,14 @@ public class WorldInfo : MonoBehaviour
         FindInitialChunksToLoad();
         UnloadChunks();
 
-        if (chunksToLoad.Count > 0)
+        for (int i = 0; i < chunksPerFrame; i++)
         {
-            RefreshOneChunk();
+            if (chunksToLoad.Count > 0)
+            {
+                RefreshOneChunk();
+            }
         }
     }
-
 
     public void UnloadChunks()
     {
@@ -190,7 +195,15 @@ public class WorldInfo : MonoBehaviour
 
     public void RefreshOneChunk()
     {
-        var terrainChunk = unloadedChunks[0];
+        TerrainChunk terrainChunk;
+        if (unloadedChunks.Count > 0)
+        {
+            terrainChunk = unloadedChunks[0];
+        }
+        else
+        {
+            return;
+        }
         unloadedChunks.RemoveAt(0);
 
         var chunkToLoad = chunksToLoad.Dequeue();
