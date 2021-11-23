@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Biome : MonoBehaviour
 {
+    public List<int> blockTextureList;
+    
     [SerializeField] private List<FastNoiseUnity> additiveFastNoises;
     [SerializeField] private List<float> weights;
     [SerializeField] private List<FastNoiseUnity> multiplicativeFastNoises;
