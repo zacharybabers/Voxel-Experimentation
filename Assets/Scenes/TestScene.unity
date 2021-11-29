@@ -427,7 +427,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6526d0da1b6f9b44a2232292782c328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  biome: {fileID: 1495421052}
+  biomes:
+  - {fileID: 1495421052}
+  numTextures: 0
 --- !u!1 &1495421051
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77734ce55647e84f9483049f31efd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockTextureList: 
   additiveFastNoises:
   - {fileID: 1495421053}
   weights:
