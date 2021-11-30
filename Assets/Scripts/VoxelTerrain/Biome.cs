@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class Biome : MonoBehaviour
 {
-    public List<int> blockTextureList;
+    public int topBlock;
+    public int innerBlock;
     
     [SerializeField] private List<FastNoiseUnity> additiveFastNoises;
     [SerializeField] private List<float> weights;
@@ -66,7 +68,7 @@ public class Biome : MonoBehaviour
                 {
                     if (chunkCoord.z * WorldInfo.chunkSize + k <= heightMap[i, j])
                     {
-                        chunkAtlas[i, j, k] = 1;
+                        chunkAtlas[i, j, k] = topBlock;
                     }
                 }
             }

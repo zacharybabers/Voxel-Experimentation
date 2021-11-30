@@ -36,6 +36,8 @@ public class WorldInfo : MonoBehaviour
         chunksToLoad = new Queue<Vector3>();
         chunkPool = new List<ChunkData>();
         unloadedChunks = new List<TerrainChunk>();
+        terrainGenerator.InitializeLookupTable();
+        meshBuilder.uvLookup = terrainGenerator.uvLookup;
         for (int i = 0; i < nonLoadedChunkSize; i++)
         {
             GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);

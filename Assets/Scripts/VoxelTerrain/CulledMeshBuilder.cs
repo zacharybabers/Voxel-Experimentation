@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
@@ -12,6 +13,8 @@ public class CulledMeshBuilder : MonoBehaviour
 
     public List<Vector3> vertexData;
     public List<int> triangleData;
+    public List<Vector2> uvData;
+    public Dictionary<int, UVSet> uvLookup;
  
 
     private float timer = 0f;
@@ -21,17 +24,8 @@ public class CulledMeshBuilder : MonoBehaviour
     public int width;
     public int height;
 
-    
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     public Mesh Build(ChunkData chunkData)
     {
@@ -45,6 +39,8 @@ public class CulledMeshBuilder : MonoBehaviour
         
         vertexData = new List<Vector3>();
         triangleData = new List<int>();
+        uvData = new List<Vector2>();
+        
         
         for (int i = 0; i < length; i++)
         {
@@ -72,6 +68,8 @@ public class CulledMeshBuilder : MonoBehaviour
         
         mesh.vertices = vertexData.ToArray();
 
+        mesh.uv = uvData.ToArray();
+
         mesh.triangles = triangleData.ToArray();
         
         mesh.RecalculateNormals();
@@ -85,39 +83,40 @@ public class CulledMeshBuilder : MonoBehaviour
 
     private void CreateQuads(int[,,] chunkArray, int i, int j, int k)
     {
+        int value = chunkArray[i, j, k];
         
         if(i ==0 || (chunkArray[i-1, j, k] == 0))     //check back
         {
-            CreateBackQuad(i, j, k);
+            CreateBackQuad(i, j, k, value);
         }
         
         if(i == length - 1 || (chunkArray[i+1, j, k] == 0))     //check front
         {
-            CreateFrontQuad(i, j, k);
+            CreateFrontQuad(i, j, k, value);
         }       
         
         if(j == 0 || (chunkArray[i, j-1, k] == 0))     //check left
         {
-            CreateLeftQuad(i, j, k);
+            CreateLeftQuad(i, j, k, value);
         }       
        
         if(j == width - 1 || (chunkArray[i, j+1, k] == 0))     //check right
         {
-            CreateRightQuad(i, j, k);
+            CreateRightQuad(i, j, k, value);
         }       
         
         if( k == 0 || (chunkArray[i, j, k-1] == 0))     //check bottom
         {
-            CreateBottomQuad(i, j, k);
+            CreateBottomQuad(i, j, k, value);
         }       
         
         if(k == height - 1 || chunkArray[i, j, k+1] == 0)     //check top
         {
-            CreateTopQuad(i, j, k);
+            CreateTopQuad(i, j, k, value);
         }       
     }
    
-    private void CreateTopQuad(int i,int j,int k)
+    private void CreateTopQuad(int i,int j,int k, int value)
     {
         for (int x = vertexData.Count; x < vertexData.Count + 6; x++)
         {
@@ -127,16 +126,28 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i + 1,j,k + 1);     //top left
         Vector3 createdVertex2 = new Vector3(i,j + 1,k + 1);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i,j,k + 1));  //top right
         vertexData.Add(createdVertex2);
+       
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].topUVs.topLeft);
+        uvData.Add(uvLookup[value].topUVs.topRight);
+        uvData.Add(uvLookup[value].topUVs.bottomRight);
         
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i+1,j+1,k+ 1));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].topUVs.topLeft);
+        uvData.Add(uvLookup[value].topUVs.bottomRight);
+        uvData.Add(uvLookup[value].topUVs.bottomLeft);
     }
     
-    private void CreateLeftQuad(int i,int j,int k)
+    private void CreateLeftQuad(int i,int j,int k, int value)
     {
         for (int x = vertexData.Count; x < vertexData.Count + 6; x++)
         {
@@ -146,15 +157,27 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i+ 1,j,k+ 1);     //top left
         Vector3 createdVertex2 = new Vector3(i,j,k);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i+1,j,k));  //top right
         vertexData.Add(createdVertex2);
         
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.topRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i,j,k+1));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomLeft);
     }
-    private void CreateRightQuad(int i,int j,int k)
+    private void CreateRightQuad(int i,int j,int k, int value)
     {
         for (int x = vertexData.Count; x < vertexData.Count + 6; x++)
         {
@@ -164,15 +187,27 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i,j+ 1,k+ 1);     //top left
         Vector3 createdVertex2 = new Vector3(i+ 1,j+ 1,k);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i,j+ 1,k));  //top right
         vertexData.Add(createdVertex2);
         
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.topRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i +1,j+ 1,k+1));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomLeft);
     }
-    private void CreateFrontQuad(int i,int j,int k)
+    private void CreateFrontQuad(int i,int j,int k, int value)
     {
        
         
@@ -184,15 +219,27 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i+ 1,j+ 1,k+ 1);     //top left
         Vector3 createdVertex2 = new Vector3(i+ 1,j,k);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i+ 1,j+1,k));  //top right
         vertexData.Add(createdVertex2);
         
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.topRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i+ 1,j,k+1));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomLeft);
     }
-    private void CreateBackQuad(int i,int j,int k)
+    private void CreateBackQuad(int i,int j,int k, int value)
     {
         for (int x = vertexData.Count; x < vertexData.Count + 6; x++)
         {
@@ -202,15 +249,27 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i,j,k+1);     //top left
         Vector3 createdVertex2 = new Vector3(i,j+1,k);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i,j,k));  //top right
         vertexData.Add(createdVertex2);
         
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.topRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i,j+1,k+1));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].sideUVs.topLeft);
+        uvData.Add(uvLookup[value].sideUVs.bottomRight);
+        uvData.Add(uvLookup[value].sideUVs.bottomLeft);
     }
-    private void CreateBottomQuad(int i,int j,int k)
+    private void CreateBottomQuad(int i,int j,int k, int value)
     {
         for (int x = vertexData.Count; x < vertexData.Count + 6; x++)
         {
@@ -220,13 +279,25 @@ public class CulledMeshBuilder : MonoBehaviour
         Vector3 createdVertex = new Vector3(i,j,k);     //top left
         Vector3 createdVertex2 = new Vector3(i+ 1,j+ 1,k);   //bottom right
         
+        //add vertices for upper right triangle
         vertexData.Add(createdVertex);
         vertexData.Add(new Vector3(i+1,j,k));  //top right
         vertexData.Add(createdVertex2);
         
+        //add uvs for upper right triangle
+        uvData.Add(uvLookup[value].bottomUVs.topLeft);
+        uvData.Add(uvLookup[value].bottomUVs.topRight);
+        uvData.Add(uvLookup[value].bottomUVs.bottomRight);
+        
+        //add vertices for bottom left triangle
         vertexData.Add(createdVertex);
         vertexData.Add(createdVertex2);
         vertexData.Add(new Vector3(i,j+1,k));   //bottom left
+        
+        //add uvs for bottom left triangle
+        uvData.Add(uvLookup[value].bottomUVs.topLeft);
+        uvData.Add(uvLookup[value].bottomUVs.bottomRight);
+        uvData.Add(uvLookup[value].bottomUVs.bottomLeft);
     }
 
     
