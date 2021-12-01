@@ -8,60 +8,54 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     [SerializeField] private List<Biome> biomes;
-    [SerializeField] private int numTextures;
+    [SerializeField] private int textureCols;
+    [SerializeField] private int textureRows;
+    [SerializeField] private float xTexInset = .01f;
+    [SerializeField] private float yTexInset = .01f;
     public Dictionary<int, UVSet> uvLookup;
 
     public void InitializeLookupTable()
     {
-        if (numTextures % 2 != 0 || numTextures == 0)
+        uvLookup = new Dictionary<int, UVSet>();
+        Dictionary<int, CubeType> cubeTypes = new Dictionary<int, CubeType>();
+        var cubes = FindObjectsOfType<CubeType>();
+        foreach (var cubeType in cubes)
         {
-            Debug.Log("Uneven amount of textures!");  //give a warning if there is an uneven amount of textures (uv coords will be repeating and therefore less accurate)
+            cubeTypes.Add(cubeType.GetBlockID(), cubeType);
+        }
+
+        foreach (var pair in cubeTypes)
+        {
+            QuadUVs topUVs = GetIntCoordUVs(pair.Value.GetTopTextureCoord());
+            QuadUVs sideUVs = GetIntCoordUVs(pair.Value.GetSideTextureCoord());
+            QuadUVs bottomUVs = GetIntCoordUVs(pair.Value.GetBottomTextureCoord());
+            
+            UVSet cubeUVs = new UVSet(topUVs, sideUVs, bottomUVs);
+            uvLookup.Add(pair.Key, cubeUVs);
         }
         
-        uvLookup = new Dictionary<int, UVSet>();
-        var initList = GenerateLookupTable();
-        for (int i = 0; i < initList.Count; i++)
-        {
-            uvLookup.Add(i + 1, initList[i]);
-        }
+        
     }
 
-    public List<UVSet> GenerateLookupTable()
+    private QuadUVs GetIntCoordUVs(Vector2Int coord)
     {
-        List<UVSet> initList = new List<UVSet>();
-        for (int i = 0; i < numTextures; i++)
-        {
-            UVSet uvSet = new UVSet();
+        Vector2 coordf = new Vector2((float) coord.x, (float) coord.y);
+        float rowsf = textureRows;
+        float colsf = textureCols;
+        
+        var top =  (coordf.y + 1f) / rowsf; 
+        var bottom = coordf.y / rowsf;
+        var left =  coordf.x  / colsf;
+        var right = (coordf.x + 1f) / colsf;
 
-            int adjustedIndex = i * 3;
-            int totalTextures = numTextures * 3;
-            //topUVs
-            var topUVs = new QuadUVs();
-            topUVs.topLeft = new Vector2((float) adjustedIndex / totalTextures, 1f);
-            topUVs.bottomRight = new Vector2( adjustedIndex + 1f/ totalTextures, 0f);
-            topUVs.topRight = new Vector2( adjustedIndex + 1f/ totalTextures, 1f);
-            topUVs.bottomLeft = new Vector2((float) adjustedIndex / totalTextures, 0f);
-            uvSet.topUVs = topUVs;
-            //sideUVs
-            var sideUVs = new QuadUVs();
-            sideUVs.topLeft = new Vector2( adjustedIndex + 1f/ totalTextures, 1f);
-            sideUVs.bottomRight = new Vector2( adjustedIndex + 2f/ totalTextures, 0f);
-            sideUVs.topRight = new Vector2( adjustedIndex + 2f/ totalTextures, 1f);
-            sideUVs.bottomLeft = new Vector2( adjustedIndex + 1f/ totalTextures, 0f);
-            uvSet.sideUVs = sideUVs;
-            //bottomUVs
-            var bottomUVs = new QuadUVs();
-            bottomUVs.topLeft = new Vector2(adjustedIndex + 2f / totalTextures, 1f);
-            bottomUVs.bottomRight = new Vector2(adjustedIndex + 3f / totalTextures, 0f);
-            bottomUVs.bottomLeft = new Vector2(adjustedIndex + 2f / totalTextures, 0f);
-            bottomUVs.topRight = new Vector2(adjustedIndex + 3f / totalTextures, 1f);
-            uvSet.bottomUVs = bottomUVs;
-            
-            initList.Add(uvSet);
-        }
+        right -= xTexInset;
+        left += xTexInset;
 
-        return initList;
-    } 
+        top -= yTexInset;
+        bottom += yTexInset;
+        
+        return new QuadUVs(new Vector2(left, top), new Vector2(right, bottom), new Vector2(left, bottom), new Vector2(right, top));
+    }
 
     public int[,,] GenerateChunkAtlas(Vector3 chunkCoord)
     {

@@ -33,6 +33,7 @@
           <e p="VoxelTerrain" t="Include">
             <e p="Biome.cs" t="Include" />
             <e p="CubeRender.cs" t="Include" />
+            <e p="CubeType.cs" t="Include" />
             <e p="CulledMeshBuilder.cs" t="Include" />
             <e p="StaticCulledMeshBuilder.cs" t="Include" />
             <e p="TerrainChunk.cs" t="Include" />

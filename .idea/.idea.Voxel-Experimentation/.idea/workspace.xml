@@ -23,14 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Voxel Texture.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Voxel Texture.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/textureDirt.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/textureDirt.png.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +41,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/F2625FD8-44AA-4DD5-B6A3-882F24F14D79/e2/e1667c72/Void.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" root0="FORCE_HIGHLIGHTING" />
@@ -59,10 +58,11 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
       </list>
     </option>
   </component>
@@ -130,7 +130,9 @@
       <workItem from="1636807300351" duration="7386000" />
       <workItem from="1637460339515" duration="15925000" />
       <workItem from="1638166890665" duration="4778000" />
-      <workItem from="1638253511742" duration="6583000" />
+      <workItem from="1638253511742" duration="7201000" />
+      <workItem from="1638334722788" duration="3970000" />
+      <workItem from="1638341147665" duration="3411000" />
     </task>
     <servers />
   </component>
