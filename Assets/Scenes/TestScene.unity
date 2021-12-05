@@ -560,6 +560,9 @@ GameObject:
   - component: {fileID: 1495421054}
   - component: {fileID: 1495421052}
   - component: {fileID: 1495421053}
+  - component: {fileID: 1495421055}
+  - component: {fileID: 1495421056}
+  - component: {fileID: 1495421057}
   m_Layer: 0
   m_Name: Biome 1
   m_TagString: Untagged
@@ -579,15 +582,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77734ce55647e84f9483049f31efd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Grassy Hills
   topBlock: 1
   innerBlock: 3
   additiveFastNoises:
   - {fileID: 1495421053}
   weights:
   - 1.7
-  multiplicativeFastNoises: []
-  groundLevel: 0
+  multiplicativeFastNoises:
+  - {fileID: 1495421056}
+  - {fileID: 1495421057}
   globalScale: 32
+  topLayerHeight: 5
+  innerFastNoise: {fileID: 1495421055}
+  innerBlockBaseLevel: 0
+  innerScale: 32
+  innerLayerAdditive: 0
 --- !u!114 &1495421053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noiseName: Default Noise
+  noiseName: Grassy Hills Upper Layer
   seed: 1337
   frequency: 0.007
   interp: 2
@@ -634,3 +644,99 @@ Transform:
   m_Father: {fileID: 299310829}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1495421055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseName: Grassy Noise Inner Layer
+  seed: 1337
+  frequency: 0.01
+  interp: 2
+  noiseType: 4
+  octaves: 3
+  lacunarity: 2
+  gain: 0.5
+  fractalType: 0
+  cellularDistanceFunction: 0
+  cellularReturnType: 0
+  cellularNoiseLookup: {fileID: 0}
+  cellularDistanceIndex0: 0
+  cellularDistanceIndex1: 1
+  cellularJitter: 0.45
+  gradientPerturbAmp: 1
+  generalSettingsFold: 1
+  fractalSettingsFold: 0
+  cellularSettingsFold: 0
+  positionWarpSettingsFold: 0
+--- !u!114 &1495421056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseName: Multiplicative Layer
+  seed: 131
+  frequency: 0.001
+  interp: 2
+  noiseType: 5
+  octaves: 3
+  lacunarity: 2
+  gain: 0.5
+  fractalType: 0
+  cellularDistanceFunction: 0
+  cellularReturnType: 0
+  cellularNoiseLookup: {fileID: 0}
+  cellularDistanceIndex0: 0
+  cellularDistanceIndex1: 1
+  cellularJitter: 0.45
+  gradientPerturbAmp: 1
+  generalSettingsFold: 1
+  fractalSettingsFold: 0
+  cellularSettingsFold: 0
+  positionWarpSettingsFold: 0
+--- !u!114 &1495421057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseName: Multiplicative Layer 2
+  seed: 145
+  frequency: 0.002
+  interp: 2
+  noiseType: 5
+  octaves: 3
+  lacunarity: 2
+  gain: 0.5
+  fractalType: 0
+  cellularDistanceFunction: 0
+  cellularReturnType: 0
+  cellularNoiseLookup: {fileID: 0}
+  cellularDistanceIndex0: 0
+  cellularDistanceIndex1: 1
+  cellularJitter: 0.45
+  gradientPerturbAmp: 1
+  generalSettingsFold: 1
+  fractalSettingsFold: 0
+  cellularSettingsFold: 0
+  positionWarpSettingsFold: 0
