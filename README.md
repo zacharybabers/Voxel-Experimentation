@@ -8,4 +8,4 @@ I don't intend on adding terrain manipulation (à la Minecraft), although it is 
 
 For mesh generation my plan is to use a simple (and currently single-threaded, might attempt multithreading through jobs/burst if the performance is too bad but I have never worked with them so that's a big if) culling algorithm to draw chunks has a single mesh.
 
-Additionally I'll be doing all of this from scratch w/ unity except importing a library for noise. (https://github.com/Auburn/FastNoiseLite)
+Additionally I'll be doing all of this from scratch w/ unity for rendering except importing a library for noise. (https://github.com/Auburn/FastNoiseLite)
