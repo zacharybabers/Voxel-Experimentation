@@ -42,12 +42,11 @@ public class WorldInfo : MonoBehaviour
         unusedTerrainChunks = new List<TerrainChunk>();
         terrainGenerator.InitializeLookupTable();
         meshBuilder.uvLookup = terrainGenerator.uvLookup;
-        //here
+        //fill unused terrain chunks
         for (int i = 0; i < nonLoadedChunkSize; i++)
         {
             GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
             var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
-            terrainChunk.SetUnloaded();
             unusedTerrainChunks.Add(terrainChunk);
         }
         lastTransformChunk = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
@@ -59,25 +58,6 @@ public class WorldInfo : MonoBehaviour
     {
         CheckSameChunk();
         UpdateChunks();
-    }
-
-    private TerrainChunk GetChunkFromCoordinates(Vector3 chunkCoord)
-    {
-        GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
-        var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
-        chunkObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
-
-        terrainChunk.CreateChunkData(chunkCoord, terrainGenerator.GenerateChunkAtlas(chunkCoord));
-        terrainChunk.chunkData.chunkMesh = meshBuilder.Build(terrainChunk.chunkData);
-        terrainChunk.chunkCoord = chunkCoord;
-
-
-        chunkObject.transform.position =
-            new Vector3(chunkCoord.x * chunkSize, chunkCoord.z * chunkSize, chunkCoord.y * chunkSize);
-
-        terrainChunk.BuildMesh();
-        terrainChunk.SetLoaded();
-        return terrainChunk;
     }
 
     private void CheckSameChunk()
@@ -162,10 +142,14 @@ public class WorldInfo : MonoBehaviour
 
         for (int i = 0; i < initialNumChunks; i++)
         {
-            var chunkLoading = chunksToLoad.Dequeue();
-            var terrainChunk = GetChunkFromCoordinates(chunkLoading);
-            loadedChunkDictionary.Add(terrainChunk.chunkCoord, terrainChunk);
-            terrainChunk.SetLoaded();
+            var chunkLoading = chunksToLoad.Dequeue(); 
+            LoadChunk(chunkLoading);
+        }
+
+        foreach (var coordinate in loadedChunkDictionary.Keys)
+        {
+            MeshChunk(coordinate);
+            AssignTerrainChunk(loadedChunkDictionary[coordinate]);
         }
     }
 
@@ -275,6 +259,25 @@ public class WorldInfo : MonoBehaviour
         if (!loadedChunkDictionary.ContainsKey(chunkCoord))
         {
             loadedChunkDictionary.Add(chunkCoord, new ChunkData(chunkCoord));
+        }
+    }
+
+    private bool MeshChunk(Vector3 chunkCoord)
+    {
+        if (!IsMeshable(chunkCoord))
+        {
+            return false;
+        }
+        loadedChunkDictionary[chunkCoord].BuildMesh();
+        return true;
+    }
+
+    private void AssignTerrainChunk(ChunkData chunkData)
+    {
+        if (!chunkData.isEmpty && chunkData.chunkMesh != null)
+        {
+            chunkData.AssignTerrainChunk(unusedTerrainChunks[unusedTerrainChunks.Count - 1]);
+            unusedTerrainChunks.RemoveAt(unusedTerrainChunks.Count - 1);
         }
     }
 

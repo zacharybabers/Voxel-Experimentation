@@ -39,7 +39,10 @@ public class ChunkData
 
     public void BuildMesh()
     {
-        chunkMesh = WorldInfo.meshBuilder.Build(this);
+        if (!isEmpty)
+        {
+            chunkMesh = WorldInfo.meshBuilder.Build(this);
+        }
     }
 
     private void GetVoxelAtlas()
@@ -58,6 +61,7 @@ public class ChunkData
     public void AssignTerrainChunk(TerrainChunk terrainChunk)
     {
         this.terrainChunk = terrainChunk;
+        terrainChunk.chunkData = this;
         UpdatePositionAndMesh();
     }
 
