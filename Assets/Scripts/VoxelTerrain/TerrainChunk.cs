@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class TerrainChunk : MonoBehaviour
@@ -33,8 +34,8 @@ public class ChunkData
     public ChunkData(Vector3 chunkCoord)
     {
         this.chunkCoord = chunkCoord;
-        isEmpty = IsEmpty();
         GetVoxelAtlas();
+        isEmpty = IsEmpty();
     }
 
     public void BuildMesh()
@@ -43,6 +44,7 @@ public class ChunkData
         {
             chunkMesh = WorldInfo.meshBuilder.Build(this);
         }
+        UpdatePositionAndMesh();
     }
 
     private void GetVoxelAtlas()
@@ -52,17 +54,31 @@ public class ChunkData
 
     public void UpdatePositionAndMesh()
     {
+        if (terrainChunk == null)
+        {
+            return;
+        }
         terrainChunk.transform.position = new Vector3(chunkCoord.x * WorldInfo.chunkSize, chunkCoord.z * WorldInfo.chunkSize, chunkCoord.y * WorldInfo.chunkSize);
         terrainChunk.meshFilter.mesh = chunkMesh;
         terrainChunk.chunkCoord = chunkCoord;
-        terrainChunk.gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
+        terrainChunk.gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ", " + chunkCoord.z + ")";
     }
 
     public void AssignTerrainChunk(TerrainChunk terrainChunk)
     {
+        terrainChunk.gameObject.SetActive(true);
         this.terrainChunk = terrainChunk;
         terrainChunk.chunkData = this;
         UpdatePositionAndMesh();
+    }
+
+    public void UnloadTerrainChunk()
+    {
+        if (terrainChunk != null)
+        {
+            this.terrainChunk.gameObject.SetActive(false);
+            this.terrainChunk = null;
+        }
     }
 
     public bool HasMesh()
@@ -72,6 +88,7 @@ public class ChunkData
 
     private bool IsEmpty()
     {
+        
         for (int i = 0; i < WorldInfo.chunkSize; i++)
         {
             for (int j = 0; j < WorldInfo.chunkSize; j++)

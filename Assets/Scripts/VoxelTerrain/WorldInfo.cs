@@ -9,6 +9,7 @@ public class WorldInfo : MonoBehaviour
 {
     public Dictionary<Vector3, ChunkData> loadedChunkDictionary;
     public Queue<Vector3> chunksToLoad;
+    public Queue<Vector3> meshQueue;
     public List<ChunkData> chunkPool;
     public List<TerrainChunk> unusedTerrainChunks;
 
@@ -38,6 +39,7 @@ public class WorldInfo : MonoBehaviour
         terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, ChunkData>();
         chunksToLoad = new Queue<Vector3>();
+        meshQueue = new Queue<Vector3>();
         chunkPool = new List<ChunkData>();
         unusedTerrainChunks = new List<TerrainChunk>();
         terrainGenerator.InitializeLookupTable();
@@ -49,6 +51,8 @@ public class WorldInfo : MonoBehaviour
             var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
             unusedTerrainChunks.Add(terrainChunk);
         }
+        var position = targetTransform.position;
+        transformChunk = new Vector3Int((int) position.x / chunkSize, (int) position.z / chunkSize, (int) position.y / chunkSize);
         lastTransformChunk = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
 
         InitializeWorld();
@@ -58,7 +62,7 @@ public class WorldInfo : MonoBehaviour
     {
         CheckSameChunk();
         UpdateChunks();
-    }
+    } 
 
     private void CheckSameChunk()
     {
@@ -71,7 +75,6 @@ public class WorldInfo : MonoBehaviour
         else
         {
             viewerNewChunkThisFrame = true;
-            Debug.Log("new chunk");
         }
 
         lastTransformChunk = transformChunk;
@@ -101,7 +104,7 @@ public class WorldInfo : MonoBehaviour
                     {
                         var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2) + Mathf.Pow((float) (k - currentChunkZ) * chunkSize, 2);
                     
-                        if (distSquared < viewDistSquared && k > -1)
+                        if (distSquared < viewDistSquared && k > -2)
                         {
                             chunksToLoad.Enqueue(new Vector3(i, j, k));
                         }
@@ -110,6 +113,8 @@ public class WorldInfo : MonoBehaviour
                 
             }
         }
+        
+        Debug.Log("chunks to load: " + chunksToLoad.Count);
 
         var myChunk = new Vector3(currentChunkX, currentChunkY, 0);
 
@@ -130,6 +135,7 @@ public class WorldInfo : MonoBehaviour
             tempList.RemoveAt(index);
             chunksToLoad = new Queue<Vector3>(tempList);
         }
+        
     }
 
     private void InitializeWorld()
@@ -149,7 +155,7 @@ public class WorldInfo : MonoBehaviour
         foreach (var coordinate in loadedChunkDictionary.Keys)
         {
             MeshChunk(coordinate);
-            AssignTerrainChunk(loadedChunkDictionary[coordinate]);
+            CreateTerrainChunk(loadedChunkDictionary[coordinate]);
         }
     }
 
@@ -157,6 +163,7 @@ public class WorldInfo : MonoBehaviour
     {
         if (viewerNewChunkThisFrame)
         {
+            UpdateMeshQueue();
             FindInitialChunksToLoad();
             UnloadChunks();
         }
@@ -167,7 +174,21 @@ public class WorldInfo : MonoBehaviour
                 if (chunksToLoad.Count > 0)
                 {
                     RefreshOneChunk();
+                    MeshOneChunk();
                 }
+            }
+        }
+    }
+
+    private void UpdateMeshQueue()
+    {
+        //if they don't have a mesh, they're not empty, and they're meshable, add to mesh queue
+        foreach (var coordinate in loadedChunkDictionary.Keys)
+        {
+            var data = loadedChunkDictionary[coordinate];
+            if (!data.HasMesh() && !data.isEmpty && IsMeshable(coordinate))
+            {
+                meshQueue.Enqueue(coordinate);
             }
         }
     }
@@ -181,24 +202,23 @@ public class WorldInfo : MonoBehaviour
         var currentChunkY = transformChunk.y;
         var currentChunkZ = transformChunk.z;
 
-        TerrainChunk[] terrainChunks = new TerrainChunk[loadedChunkDictionary.Count];
-        loadedChunkDictionary.Values.CopyTo(terrainChunks, 0);
+        var chunkDatas = new ChunkData[loadedChunkDictionary.Count];
+        loadedChunkDictionary.Values.CopyTo(chunkDatas, 0);
 
         for (int chunkNum = 0; chunkNum < loadedChunkDictionary.Count; chunkNum++)
         {
             //calculate view distance, check which chunks are outside of it, then add them to pool and unload them
-            var distSquared = Mathf.Pow((float) (terrainChunks[chunkNum].chunkCoord.x - currentChunkX) * chunkSize, 2) +
-                              Mathf.Pow((float) (terrainChunks[chunkNum].chunkCoord.y - currentChunkY) * chunkSize, 2) +
-                              Mathf.Pow((float) (terrainChunks[chunkNum].chunkCoord.z - currentChunkZ) * chunkSize, 2);
+            var distSquared = Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.x - currentChunkX) * chunkSize, 2) +
+                              Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.y - currentChunkY) * chunkSize, 2) +
+                              Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.z - currentChunkZ) * chunkSize, 2);
             if (distSquared >= viewDistSquared)
             {
-                var terrainChunk = terrainChunks[chunkNum];
-
-                terrainChunk.SetUnloaded();
-                loadedChunkDictionary.Remove(terrainChunk.chunkCoord);
-                unusedTerrainChunks.Add(terrainChunk);
-
-                chunkPool.Add(terrainChunk.chunkData);
+                var chunkData = chunkDatas[chunkNum];
+                unusedTerrainChunks.Add(chunkData.terrainChunk);
+                chunkData.UnloadTerrainChunk();
+                loadedChunkDictionary.Remove(chunkData.chunkCoord);
+                
+                chunkPool.Add(chunkData);
                 if (chunkPool.Count > chunkPoolSize)
                 {
                     chunkPool.RemoveAt(0);
@@ -207,31 +227,27 @@ public class WorldInfo : MonoBehaviour
         }
         //take out of range chunks out of chunkstoload
         
-    }
+    } 
 
     private void RefreshOneChunk()
     {
-        TerrainChunk terrainChunk;
-        if (unusedTerrainChunks.Count > 0)
-        {
-            terrainChunk = unusedTerrainChunks[0];
-        }
-        else
-        {
-            return;
-        }
-        unusedTerrainChunks.RemoveAt(0);
-
+        Debug.Log("running");
         var chunkToLoad = chunksToLoad.Dequeue();
+        Debug.Log("chunkToLoad: (" + chunkToLoad.x + ", " + chunkToLoad.z + ", " + chunkToLoad.y + ")");
+        
 
         bool gotChunk = false;
 
-        for (int i = chunkPool.Count - 1; i >= 0; i--)
+        /*for (int i = chunkPool.Count - 1; i >= 0; i--)
         {
             bool finished = false;
             if (chunkPool[i].chunkCoord.Equals(chunkToLoad))
             {
-                terrainChunk.SetChunkData(chunkPool[i]);
+                loadedChunkDictionary.Add(chunkToLoad, chunkPool[i]);
+                if (!chunkPool[i].HasMesh())
+                {
+                    MeshChunk(chunkToLoad);
+                }
                 chunkPool.RemoveAt(i);
                 gotChunk = true;
                 finished = true;
@@ -241,17 +257,25 @@ public class WorldInfo : MonoBehaviour
             {
                 break;
             }
-        }
-
+        }*/
+       
+        
         if (!gotChunk)
         {
-            terrainChunk.CreateChunkData(chunkToLoad, terrainGenerator.GenerateChunkAtlas(chunkToLoad));
+            LoadChunk(chunkToLoad);
         }
+        Debug.Log(loadedChunkDictionary[chunkToLoad].chunkMesh);
+        
+        CreateTerrainChunk(loadedChunkDictionary[chunkToLoad]);
+    }
 
-        terrainChunk.SetLoaded();
-        terrainChunk.UpdatePositionAndMesh();
-
-        loadedChunkDictionary.Add(chunkToLoad, terrainChunk);
+    private void MeshOneChunk()
+    {
+        if (meshQueue.Count == 0)
+        {
+            return;
+        }
+        MeshChunk(meshQueue.Dequeue());
     }
 
     private void LoadChunk(Vector3 chunkCoord)
@@ -272,17 +296,40 @@ public class WorldInfo : MonoBehaviour
         return true;
     }
 
+    private void AssignOrCreate(ChunkData chunkData)
+    {
+        if (unusedTerrainChunks.Count == 0)
+        {
+            CreateTerrainChunk(chunkData);
+        }
+        else
+        {
+            AssignTerrainChunk(chunkData);
+        }
+    }
+
     private void AssignTerrainChunk(ChunkData chunkData)
     {
-        if (!chunkData.isEmpty && chunkData.chunkMesh != null)
+        if (!chunkData.isEmpty)
         {
             chunkData.AssignTerrainChunk(unusedTerrainChunks[unusedTerrainChunks.Count - 1]);
             unusedTerrainChunks.RemoveAt(unusedTerrainChunks.Count - 1);
         }
     }
 
+    private void CreateTerrainChunk(ChunkData chunkData)
+    {
+        if (!chunkData.isEmpty)
+        {
+            GameObject chunkObject = Instantiate(chunkPrefab, chunkParent);
+            var terrainChunk = chunkObject.AddComponent<TerrainChunk>();
+            chunkData.AssignTerrainChunk(terrainChunk);
+        }
+    }
+
     private bool IsMeshable(Vector3 chunkCoord)
     {
+        
         if (!loadedChunkDictionary.ContainsKey(chunkCoord) || loadedChunkDictionary[chunkCoord].isEmpty)
         {
             return false;
@@ -317,8 +364,10 @@ public class WorldInfo : MonoBehaviour
         {
             return false;
         }
-
+        
         return true;
 
     }
+    
+    //todo add support for partially reinitializing world if the current chunk is not adjacent to last frames chunk... aka teleportation (currently this glitches things out)
 }
