@@ -35,6 +35,8 @@ public class WorldInfo : MonoBehaviour
 
     private void Awake()
     {
+        var CTD = FindObjectOfType<CubeTypeDistributor>();
+        CTD.UpdateIDs();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, ChunkData>();

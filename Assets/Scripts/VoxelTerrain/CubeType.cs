@@ -12,9 +12,16 @@ public class CubeType : MonoBehaviour
     [SerializeField] private Vector2Int sideTexture;
     [SerializeField] private Vector2Int bottomTexture;
 
+    int newID = 0;
+
     public int GetBlockID()
     {
         return blockID;
+    }
+
+    public void SetNewID(int id)
+    {
+        newID = id;
     }
 
     public Vector2Int GetTopTextureCoord()
