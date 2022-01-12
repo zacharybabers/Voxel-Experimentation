@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class WorldInfo : MonoBehaviour
 {
-    public Dictionary<Vector3, ChunkData> loadedChunkDictionary;
+    public static Dictionary<Vector3, ChunkData> loadedChunkDictionary;
     public Queue<Vector3> chunksToLoad;
     public Queue<Vector3> meshQueue;
     public List<ChunkData> chunkPool;
@@ -37,6 +37,7 @@ public class WorldInfo : MonoBehaviour
     {
         InitCubeTypes();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
+        meshBuilder.InitMeshBuilder();
         terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, ChunkData>();
         chunksToLoad = new Queue<Vector3>();
@@ -117,7 +118,7 @@ public class WorldInfo : MonoBehaviour
                     {
                         var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2) + Mathf.Pow((float) (k - currentChunkZ) * chunkSize, 2);
                     
-                        if (distSquared < viewDistSquared && k > -2)
+                        if (distSquared < viewDistSquared && k > -4)
                         {
                             chunksToLoad.Enqueue(new Vector3(i, j, k));
                         }
@@ -127,8 +128,6 @@ public class WorldInfo : MonoBehaviour
             }
         }
         
-        Debug.Log("chunks to load: " + chunksToLoad.Count);
-
         var myChunk = new Vector3(currentChunkX, currentChunkY, 0);
 
         if (chunksToLoad.Contains(myChunk) && chunksToLoad.Peek() != myChunk)
@@ -244,11 +243,8 @@ public class WorldInfo : MonoBehaviour
 
     private void RefreshOneChunk()
     {
-        Debug.Log("running");
         var chunkToLoad = chunksToLoad.Dequeue();
-        Debug.Log("chunkToLoad: (" + chunkToLoad.x + ", " + chunkToLoad.z + ", " + chunkToLoad.y + ")");
         
-
         bool gotChunk = false;
 
         /*for (int i = chunkPool.Count - 1; i >= 0; i--)
@@ -277,8 +273,7 @@ public class WorldInfo : MonoBehaviour
         {
             LoadChunk(chunkToLoad);
         }
-        Debug.Log(loadedChunkDictionary[chunkToLoad].chunkMesh);
-        
+
         CreateTerrainChunk(loadedChunkDictionary[chunkToLoad]);
     }
 
@@ -325,6 +320,7 @@ public class WorldInfo : MonoBehaviour
     {
         if (!chunkData.isEmpty)
         {
+            Debug.Log("the terrain chunk is: " + (unusedTerrainChunks[unusedTerrainChunks.Count - 1] == null));
             chunkData.AssignTerrainChunk(unusedTerrainChunks[unusedTerrainChunks.Count - 1]);
             unusedTerrainChunks.RemoveAt(unusedTerrainChunks.Count - 1);
         }
@@ -384,3 +380,4 @@ public class WorldInfo : MonoBehaviour
     
     //todo add support for partially reinitializing world if the current chunk is not adjacent to last frames chunk... aka teleportation (currently this glitches things out)
 }
+

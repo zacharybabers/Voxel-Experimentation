@@ -15,8 +15,8 @@ public class CulledMeshBuilder : MonoBehaviour
     public List<int> triangleData;
     public List<Vector2> uvData;
     public UVSet[] uvLookup;
- 
 
+    
     private float timer = 0f;
     
     
@@ -25,9 +25,20 @@ public class CulledMeshBuilder : MonoBehaviour
     public int height;
 
 
-    
+    public void InitMeshBuilder()
+    {
+        vertexData = new List<Vector3>();
+        triangleData = new List<int>();
+        uvData = new List<Vector2>();
+    }
 
-    public Mesh Build(ChunkData chunkData)
+    private void UpdateSurroundingChunks()
+    {
+        
+    }
+
+    public Mesh Build(ChunkData chunkData, ref int[,,] topChunk, ref int[,,] bottomChunk, ref int[,,] leftChunk,
+        ref int[,,] rightChunk, ref int[,,] forwardChunk, ref int[,,] backChunk)
     {
         timer = Time.realtimeSinceStartup;
         
@@ -37,9 +48,9 @@ public class CulledMeshBuilder : MonoBehaviour
         width = chunkArray.GetLength(1);
         height = chunkArray.GetLength(2);
         
-        vertexData = new List<Vector3>();
-        triangleData = new List<int>();
-        uvData = new List<Vector2>();
+        vertexData.Clear();
+        triangleData.Clear();
+        uvData.Clear();
         
         
         for (int i = 0; i < length; i++)
@@ -50,7 +61,7 @@ public class CulledMeshBuilder : MonoBehaviour
                 {
                     if (chunkArray[i, j, k] != 0)
                     {
-                        CreateQuads(chunkArray, i, j, k);
+                        CreateQuads(chunkArray, i, j, k, ref topChunk, ref bottomChunk, ref leftChunk, ref rightChunk, ref forwardChunk, ref backChunk);
                     }
                     
                 }
@@ -81,36 +92,38 @@ public class CulledMeshBuilder : MonoBehaviour
         return mesh;
     }
 
-    private void CreateQuads(int[,,] chunkArray, int i, int j, int k)
+    private void CreateQuads(int[,,] chunkArray, int i, int j, int k, ref int[,,] topChunk, ref int[,,] bottomChunk, ref int[,,] leftChunk,
+        ref int[,,] rightChunk, ref int[,,] forwardChunk, ref int[,,] backChunk)
     {
         int value = chunkArray[i, j, k];
         
-        if(i ==0 || (chunkArray[i-1, j, k] == 0))     //check back
+        
+        if((i == 0 && leftChunk[length - 1, j, k] == 0) || (i != 0 && chunkArray[i-1, j, k] == 0))     //check back
         {
             CreateBackQuad(i, j, k, ref uvLookup[value].sideUVs);
         }
         
-        if(i == length - 1 || (chunkArray[i+1, j, k] == 0))     //check front
+        if((i == length - 1 && rightChunk[0, j, k] == 0) || (i != length - 1 && chunkArray[i+1, j, k] == 0))     //check front
         {
             CreateFrontQuad(i, j, k, ref uvLookup[value].sideUVs);
         }       
         
-        if(j == 0 || (chunkArray[i, j-1, k] == 0))     //check left
+        if((j == 0 && backChunk[i, width - 1, k] == 0) || (j!= 0 && chunkArray[i, j-1, k] == 0))     //check left
         {
             CreateLeftQuad(i, j, k, ref uvLookup[value].sideUVs);
         }       
        
-        if(j == width - 1 || (chunkArray[i, j+1, k] == 0))     //check right
+        if((j == width - 1 && forwardChunk[i, 0, k] == 0) || (j != width - 1 && chunkArray[i, j+1, k] == 0))     //check right
         {
             CreateRightQuad(i, j, k, ref uvLookup[value].sideUVs);
         }       
         
-        if( k == 0 || (chunkArray[i, j, k-1] == 0))     //check bottom
+        if( (k == 0 && bottomChunk[i, j, height - 1] == 0) || (k != 0 && chunkArray[i, j, k-1] == 0))     //check bottom
         {
             CreateBottomQuad(i, j, k, ref uvLookup[value].bottomUVs);
         }       
         
-        if(k == height - 1 || chunkArray[i, j, k+1] == 0)     //check top
+        if((k == height - 1 && topChunk[i,j, 0] == 0) || (k != height - 1 && chunkArray[i, j, k+1] == 0))     //check top
         {
             CreateTopQuad(i, j, k, ref uvLookup[value].topUVs);
         }       
@@ -302,3 +315,4 @@ public class CulledMeshBuilder : MonoBehaviour
 
     
 }
+

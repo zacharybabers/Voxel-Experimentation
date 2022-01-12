@@ -10,7 +10,6 @@ public class CubeTypeDistributor : MonoBehaviour
     {
         var cubeTypes = FindObjectsOfType<CubeType>();
         var cubeList = cubeTypes.ToList();
-        Debug.Log(cubeList.Count);
         List<int> cubeIDs = new List<int>();
         foreach (var cubeType in cubeList)
         {

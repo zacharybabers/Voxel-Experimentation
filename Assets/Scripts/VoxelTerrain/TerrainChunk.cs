@@ -25,7 +25,7 @@ public class ChunkData
 
     public bool isEmpty;
     
-    public Mesh chunkMesh;
+    private Mesh chunkMesh;
     
     public int[,,] voxelAtlas;
 
@@ -42,7 +42,21 @@ public class ChunkData
     {
         if (!isEmpty)
         {
-            chunkMesh = WorldInfo.meshBuilder.Build(this);
+            var top = new Vector3(chunkCoord.x, chunkCoord.y, chunkCoord.z+1);
+            var bottom = new Vector3(chunkCoord.x, chunkCoord.y, chunkCoord.z-1);
+            var left = new Vector3(chunkCoord.x-1, chunkCoord.y, chunkCoord.z);
+            var right = new Vector3(chunkCoord.x+1, chunkCoord.y, chunkCoord.z);
+            var forward = new Vector3(chunkCoord.x, chunkCoord.y+1, chunkCoord.z);
+            var backward = new Vector3(chunkCoord.x, chunkCoord.y-1, chunkCoord.z);
+
+            ref var topChunk = ref WorldInfo.loadedChunkDictionary[top].voxelAtlas;
+            ref var bottomChunk = ref WorldInfo.loadedChunkDictionary[bottom].voxelAtlas;
+            ref var leftChunk = ref WorldInfo.loadedChunkDictionary[left].voxelAtlas;
+            ref var rightChunk = ref WorldInfo.loadedChunkDictionary[right].voxelAtlas;
+            ref var forwardChunk = ref WorldInfo.loadedChunkDictionary[forward].voxelAtlas;
+            ref var backChunk = ref WorldInfo.loadedChunkDictionary[backward].voxelAtlas;
+            
+            chunkMesh = WorldInfo.meshBuilder.Build(this, ref topChunk, ref bottomChunk, ref leftChunk, ref rightChunk, ref forwardChunk, ref backChunk);
         }
         UpdatePositionAndMesh();
     }
@@ -52,7 +66,7 @@ public class ChunkData
         voxelAtlas = WorldInfo.terrainGenerator.GenerateChunkAtlas(chunkCoord);
     }
 
-    public void UpdatePositionAndMesh()
+    private void UpdatePositionAndMesh()
     {
         if (terrainChunk == null)
         {
