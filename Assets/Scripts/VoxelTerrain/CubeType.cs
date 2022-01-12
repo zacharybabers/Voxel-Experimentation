@@ -24,6 +24,11 @@ public class CubeType : MonoBehaviour
         newID = id;
     }
 
+    public int GetNewID()
+    {
+        return newID;
+    }
+
     public Vector2Int GetTopTextureCoord()
     {
         return topTexture;

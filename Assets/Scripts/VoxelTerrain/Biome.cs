@@ -29,6 +29,30 @@ public class Biome : MonoBehaviour
         {
             Debug.Log("Different number of additive fast noises and weights in this Biome.");
         }
+        
+    }
+
+    public void UpdateCubeTypes()
+    {
+        var cubeTypes = FindObjectsOfType<CubeType>();
+
+        bool innerChanged = false;
+        bool topChanged = false;
+        
+        foreach (var cubeType in cubeTypes)
+        {
+            if (innerBlock == cubeType.GetBlockID() && !innerChanged)
+            {
+                innerBlock = cubeType.GetNewID();
+                innerChanged = true;
+            }
+
+            if (topBlock == cubeType.GetBlockID() && !topChanged)
+            {
+                topBlock = cubeType.GetNewID();
+                topChanged = true;
+            }
+        }
     }
 
     private int[,] GenerateHeightMap(Vector3 chunkCoord) //generate 'top block'/surface heightmap

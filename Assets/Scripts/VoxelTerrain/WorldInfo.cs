@@ -35,8 +35,7 @@ public class WorldInfo : MonoBehaviour
 
     private void Awake()
     {
-        var CTD = FindObjectOfType<CubeTypeDistributor>();
-        CTD.UpdateIDs();
+        InitCubeTypes();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, ChunkData>();
@@ -64,7 +63,19 @@ public class WorldInfo : MonoBehaviour
     {
         CheckSameChunk();
         UpdateChunks();
-    } 
+    }
+
+    private void InitCubeTypes()
+    {
+        var ctd = FindObjectOfType<CubeTypeDistributor>();
+        ctd.UpdateIDs();
+
+        var biomes = FindObjectsOfType<Biome>();
+        foreach (var biome in biomes)
+        {
+            biome.UpdateCubeTypes();
+        }
+    }
 
     private void CheckSameChunk()
     {
