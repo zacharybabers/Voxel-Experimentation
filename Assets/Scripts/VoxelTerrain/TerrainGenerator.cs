@@ -12,13 +12,13 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private int textureRows;
     [SerializeField] private float xTexInset = .01f;
     [SerializeField] private float yTexInset = .01f;
-    public Dictionary<int, UVSet> uvLookup;
+    public UVSet[] uvLookup;
 
     public void InitializeLookupTable()
     {
-        uvLookup = new Dictionary<int, UVSet>();
         Dictionary<int, CubeType> cubeTypes = new Dictionary<int, CubeType>();
         var cubes = FindObjectsOfType<CubeType>();
+        uvLookup = new UVSet[cubes.Length + 1];
         foreach (var cubeType in cubes)
         {
             cubeTypes.Add(cubeType.GetBlockID(), cubeType);
@@ -31,7 +31,7 @@ public class TerrainGenerator : MonoBehaviour
             QuadUVs bottomUVs = GetIntCoordUVs(pair.Value.GetBottomTextureCoord());
             
             UVSet cubeUVs = new UVSet(topUVs, sideUVs, bottomUVs);
-            uvLookup.Add(pair.Key, cubeUVs);
+            uvLookup[pair.Value.GetNewID()] = cubeUVs;
         }
         
         

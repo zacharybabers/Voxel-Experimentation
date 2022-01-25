@@ -1,56 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class TerrainChunk : MonoBehaviour
 {
     public ChunkData chunkData;
     public Vector3 chunkCoord;
-    public bool loaded = true;
+    public MeshFilter meshFilter;
 
-    public void CreateChunkData(Vector3 chunkCoordinate, int[,,] voxelAtlas)
+    private void Awake()
     {
-        chunkCoord = chunkCoordinate;
-        chunkData = new ChunkData(voxelAtlas, chunkCoordinate, 32);
-        chunkData.chunkMesh = WorldInfo.meshBuilder.Build(chunkData);
+        meshFilter = gameObject.GetComponent<MeshFilter>();
     }
-
-    public void SetChunkData(ChunkData chunkData)
-    {
-        this.chunkData = chunkData;
-        chunkCoord = chunkData.chunkCoord;
-    }
-
-    public void BuildMesh()
-    {
-        var meshFilter = gameObject.GetComponent<MeshFilter>();
-        meshFilter.mesh = chunkData.chunkMesh;
-    }
-
-    public void UpdatePositionAndMesh()
-    {
-        transform.position = new Vector3(chunkCoord.x * chunkData.size, chunkCoord.z * chunkData.size, chunkCoord.y * chunkData.size);
-        var meshFilter = gameObject.GetComponent<MeshFilter>();
-        meshFilter.mesh = chunkData.chunkMesh;
-        this.chunkCoord = chunkData.chunkCoord;
-        gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ")";
-
-        //Debug.Log("Updating Chunk at new coord (" + chunkCoord.x + ", " + chunkCoord.y + ") to position (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
-    }
-
-    public void SetUnloaded()
-    {
-        this.loaded = false; 
-        gameObject.SetActive(false);
-    }
-
-    public void SetLoaded()
-    {
-        this.loaded = true;
-        gameObject.SetActive(true);
-    }
-
-  
+    
 }
 
 
@@ -59,17 +23,102 @@ public class ChunkData
 {
     public Vector3 chunkCoord;
 
-    public int size;
-
-    public Mesh chunkMesh;
+    public bool isEmpty;
+    
+    private Mesh chunkMesh;
     
     public int[,,] voxelAtlas;
 
-    public ChunkData(int[,,] voxelAtlas, Vector3 chunkCoord, int size)
+    public TerrainChunk terrainChunk;
+
+    public ChunkData(Vector3 chunkCoord)
     {
-        this.voxelAtlas = voxelAtlas;
         this.chunkCoord = chunkCoord;
-        this.size = size;
+        GetVoxelAtlas();
+        isEmpty = IsEmpty();
     }
-  
+
+    public void BuildMesh()
+    {
+        if (!isEmpty)
+        {
+            var top = new Vector3(chunkCoord.x, chunkCoord.y, chunkCoord.z+1);
+            var bottom = new Vector3(chunkCoord.x, chunkCoord.y, chunkCoord.z-1);
+            var left = new Vector3(chunkCoord.x-1, chunkCoord.y, chunkCoord.z);
+            var right = new Vector3(chunkCoord.x+1, chunkCoord.y, chunkCoord.z);
+            var forward = new Vector3(chunkCoord.x, chunkCoord.y+1, chunkCoord.z);
+            var backward = new Vector3(chunkCoord.x, chunkCoord.y-1, chunkCoord.z);
+
+            ref var topChunk = ref WorldInfo.loadedChunkDictionary[top].voxelAtlas;
+            ref var bottomChunk = ref WorldInfo.loadedChunkDictionary[bottom].voxelAtlas;
+            ref var leftChunk = ref WorldInfo.loadedChunkDictionary[left].voxelAtlas;
+            ref var rightChunk = ref WorldInfo.loadedChunkDictionary[right].voxelAtlas;
+            ref var forwardChunk = ref WorldInfo.loadedChunkDictionary[forward].voxelAtlas;
+            ref var backChunk = ref WorldInfo.loadedChunkDictionary[backward].voxelAtlas;
+            
+            chunkMesh = WorldInfo.meshBuilder.Build(this, ref topChunk, ref bottomChunk, ref leftChunk, ref rightChunk, ref forwardChunk, ref backChunk);
+        }
+        UpdatePositionAndMesh();
+    }
+
+    private void GetVoxelAtlas()
+    {
+        voxelAtlas = WorldInfo.terrainGenerator.GenerateChunkAtlas(chunkCoord);
+    }
+
+    private void UpdatePositionAndMesh()
+    {
+        if (terrainChunk == null)
+        {
+            return;
+        }
+        terrainChunk.transform.position = new Vector3(chunkCoord.x * WorldInfo.chunkSize, chunkCoord.z * WorldInfo.chunkSize, chunkCoord.y * WorldInfo.chunkSize);
+        terrainChunk.meshFilter.mesh = chunkMesh;
+        terrainChunk.chunkCoord = chunkCoord;
+        terrainChunk.gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ", " + chunkCoord.z + ")";
+    }
+
+    public void AssignTerrainChunk(TerrainChunk terrainChunk)
+    {
+        terrainChunk.gameObject.SetActive(true);
+        this.terrainChunk = terrainChunk;
+        terrainChunk.chunkData = this;
+        UpdatePositionAndMesh();
+    }
+
+    public void UnloadTerrainChunk()
+    {
+        if (terrainChunk != null)
+        {
+            this.terrainChunk.gameObject.SetActive(false);
+            this.terrainChunk = null;
+        }
+    }
+
+    public bool HasMesh()
+    {
+        return this.chunkMesh != null;
+    }
+
+    private bool IsEmpty()
+    {
+        
+        for (int i = 0; i < WorldInfo.chunkSize; i++)
+        {
+            for (int j = 0; j < WorldInfo.chunkSize; j++)
+            {
+                for (int k = 0; k < WorldInfo.chunkSize; k++)
+                {
+                    if (voxelAtlas[i, j, k] != 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    
 }
