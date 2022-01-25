@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -423,10 +423,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c094e8e5c0ebbee4eb9b3708fd553575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unloadedChunks: []
+  unusedTerrainChunks: []
   chunkPoolSize: 9
   nonLoadedChunkSize: 900
   chunksPerFrame: 5
+  worldLOD: 0
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
   targetTransform: {fileID: 535058424}
@@ -584,7 +585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Grassy Hills
   topBlock: 1
-  innerBlock: 3
+  innerBlock: 2
   additiveFastNoises:
   - {fileID: 1495421053}
   weights:

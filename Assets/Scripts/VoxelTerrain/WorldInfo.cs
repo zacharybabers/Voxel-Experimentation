@@ -16,6 +16,7 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private int chunkPoolSize = 9;
     [SerializeField] private int nonLoadedChunkSize = 9;
     [SerializeField] private int chunksPerFrame = 5;
+    [SerializeField] private int worldLOD = 0;
 
     private static bool viewerNewChunkThisFrame;
     public const int chunkSize = 32;
@@ -38,6 +39,7 @@ public class WorldInfo : MonoBehaviour
         InitCubeTypes();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         meshBuilder.InitMeshBuilder();
+        meshBuilder.mainLOD = worldLOD;
         terrainGenerator = gameObject.GetComponent<TerrainGenerator>();
         loadedChunkDictionary = new Dictionary<Vector3, ChunkData>();
         chunksToLoad = new Queue<Vector3>();
@@ -68,7 +70,7 @@ public class WorldInfo : MonoBehaviour
 
     private void InitCubeTypes()
     {
-        var ctd = FindObjectOfType<CubeTypeDistributor>();
+        var ctd = gameObject.AddComponent<CubeTypeDistributor>();
         ctd.UpdateIDs();
 
         var biomes = FindObjectsOfType<Biome>();
