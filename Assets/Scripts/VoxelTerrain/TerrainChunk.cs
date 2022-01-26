@@ -24,8 +24,10 @@ public class ChunkData
     public Vector3 chunkCoord;
 
     public bool isEmpty;
+
+    public int currentLOD;
     
-    private Mesh chunkMesh;
+    private Mesh[] chunkMeshes;
     
     public int[,,] voxelAtlas;
 
@@ -36,6 +38,8 @@ public class ChunkData
         this.chunkCoord = chunkCoord;
         GetVoxelAtlas();
         isEmpty = IsEmpty();
+        chunkMeshes = new Mesh[5];
+        currentLOD = -1;
     }
 
     public void BuildMesh()
@@ -50,13 +54,46 @@ public class ChunkData
             var backward = new Vector3(chunkCoord.x, chunkCoord.y-1, chunkCoord.z);
 
             ref var topChunk = ref WorldInfo.loadedChunkDictionary[top].voxelAtlas;
-            ref var bottomChunk = ref WorldInfo.loadedChunkDictionary[bottom].voxelAtlas;
-            ref var leftChunk = ref WorldInfo.loadedChunkDictionary[left].voxelAtlas;
-            ref var rightChunk = ref WorldInfo.loadedChunkDictionary[right].voxelAtlas;
-            ref var forwardChunk = ref WorldInfo.loadedChunkDictionary[forward].voxelAtlas;
-            ref var backChunk = ref WorldInfo.loadedChunkDictionary[backward].voxelAtlas;
+            /*
+            if (WorldInfo.loadedChunkDictionary[top].currentLOD != this.currentLOD)
+            {
+                topChunk = ref WorldInfo.emptyAtlas;
+            }
+            */
             
-            chunkMesh = WorldInfo.meshBuilder.Build(this, ref topChunk, ref bottomChunk, ref leftChunk, ref rightChunk, ref forwardChunk, ref backChunk);
+            ref var bottomChunk = ref WorldInfo.loadedChunkDictionary[bottom].voxelAtlas;
+            /*
+            if (WorldInfo.loadedChunkDictionary[bottom].currentLOD != this.currentLOD)
+            {
+                bottomChunk = ref WorldInfo.emptyAtlas;
+            }
+            */
+            
+            ref var leftChunk = ref WorldInfo.loadedChunkDictionary[left].voxelAtlas;
+            if (WorldInfo.loadedChunkDictionary[left].currentLOD != this.currentLOD)
+            {
+                leftChunk = ref WorldInfo.emptyAtlas;
+            }
+            
+            ref var rightChunk = ref WorldInfo.loadedChunkDictionary[right].voxelAtlas;
+            if (WorldInfo.loadedChunkDictionary[right].currentLOD != this.currentLOD)
+            {
+                rightChunk = ref WorldInfo.emptyAtlas;
+            }
+            
+            ref var forwardChunk = ref WorldInfo.loadedChunkDictionary[forward].voxelAtlas;
+            if (WorldInfo.loadedChunkDictionary[forward].currentLOD != this.currentLOD)
+            {
+                forwardChunk = ref WorldInfo.emptyAtlas;
+            }
+            
+            ref var backChunk = ref WorldInfo.loadedChunkDictionary[backward].voxelAtlas;
+            if (WorldInfo.loadedChunkDictionary[backward].currentLOD != this.currentLOD)
+            {
+                backChunk = ref WorldInfo.emptyAtlas;
+            }
+            
+            chunkMeshes[currentLOD] = WorldInfo.meshBuilder.BuildLOD(currentLOD, this, ref topChunk, ref bottomChunk, ref leftChunk, ref rightChunk, ref forwardChunk, ref backChunk);
         }
         UpdatePositionAndMesh();
     }
@@ -66,14 +103,17 @@ public class ChunkData
         voxelAtlas = WorldInfo.terrainGenerator.GenerateChunkAtlas(chunkCoord);
     }
 
-    private void UpdatePositionAndMesh()
+    public void UpdatePositionAndMesh()
     {
         if (terrainChunk == null)
         {
             return;
         }
         terrainChunk.transform.position = new Vector3(chunkCoord.x * WorldInfo.chunkSize, chunkCoord.z * WorldInfo.chunkSize, chunkCoord.y * WorldInfo.chunkSize);
-        terrainChunk.meshFilter.mesh = chunkMesh;
+        if (currentLOD != -1)
+        {
+            terrainChunk.meshFilter.mesh = chunkMeshes[currentLOD];
+        }
         terrainChunk.chunkCoord = chunkCoord;
         terrainChunk.gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ", " + chunkCoord.z + ")";
     }
@@ -97,7 +137,7 @@ public class ChunkData
 
     public bool HasMesh()
     {
-        return this.chunkMesh != null;
+        return this.chunkMeshes[currentLOD] != null;
     }
 
     private bool IsEmpty()

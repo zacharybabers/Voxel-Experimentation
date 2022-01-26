@@ -431,7 +431,12 @@ MonoBehaviour:
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
   targetTransform: {fileID: 535058424}
-  drawDistance: 350
+  lodDistances:
+  - 350
+  - 430
+  - 510
+  - 590
+  - 700
 --- !u!4 &682102888
 Transform:
   m_ObjectHideFlags: 0
