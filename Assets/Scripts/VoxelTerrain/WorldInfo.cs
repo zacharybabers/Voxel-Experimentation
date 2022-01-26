@@ -184,7 +184,6 @@ public class WorldInfo : MonoBehaviour
                                   Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
                 if (distSquared < viewDistSquared)
                 {
-                    Debug.Log("update LOD to: " + i);
                     loadedChunkDictionary[coordinate].currentLOD = i;
                     break;
                 }
