@@ -23,6 +23,7 @@ public class WorldInfo : MonoBehaviour
 
     public static CulledMeshBuilder meshBuilder;
     public static TerrainGenerator terrainGenerator;
+    public static int[,,] emptyAtlas;
 
     [SerializeField] private Transform chunkParent;
     [SerializeField] private GameObject chunkPrefab;
@@ -32,10 +33,13 @@ public class WorldInfo : MonoBehaviour
     private Vector3Int transformChunk;
     private Vector3Int lastTransformChunk;
     
-    [SerializeField] private float drawDistance;
+    private float drawDistance;
+    [SerializeField] private float[] lodDistances;
 
     private void Awake()
     {
+        emptyAtlas = new int[chunkSize,chunkSize,chunkSize];
+        drawDistance = lodDistances[4];
         InitCubeTypes();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         meshBuilder.InitMeshBuilder();
@@ -166,8 +170,26 @@ public class WorldInfo : MonoBehaviour
             LoadChunk(chunkLoading);
         }
 
+        var currentChunkX = transformChunk.x;
+        var currentChunkY = transformChunk.y;
+        var currentChunkZ = transformChunk.z;
+        
         foreach (var coordinate in loadedChunkDictionary.Keys)
         {
+            for (int i = 0; i < 5; i++)
+            {
+                var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
+                if (distSquared < viewDistSquared)
+                {
+                    loadedChunkDictionary[coordinate].currentLOD = i;
+                    break;
+                }
+                
+            }
+            
             MeshChunk(coordinate);
             CreateTerrainChunk(loadedChunkDictionary[coordinate]);
         }
@@ -177,7 +199,7 @@ public class WorldInfo : MonoBehaviour
     {
         if (viewerNewChunkThisFrame)
         {
-            UpdateMeshQueue();
+            UpdateLODNeeded();
             FindInitialChunksToLoad();
             UnloadChunks();
         }
@@ -194,17 +216,52 @@ public class WorldInfo : MonoBehaviour
         }
     }
 
-    private void UpdateMeshQueue()
+    private void UpdateLODNeeded()
     {
-        //if they don't have a mesh, they're not empty, and they're meshable, add to mesh queue
+        var currentChunkX = transformChunk.x;
+        var currentChunkY = transformChunk.y;
+        var currentChunkZ = transformChunk.z;
+        
         foreach (var coordinate in loadedChunkDictionary.Keys)
         {
-            var data = loadedChunkDictionary[coordinate];
-            if (!data.HasMesh() && !data.isEmpty && IsMeshable(coordinate))
+            for (int i = 0; i < 5; i++)
             {
-                meshQueue.Enqueue(coordinate);
+                var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
+                if (distSquared < viewDistSquared)
+                {
+                    UpdateMeshQueue(coordinate, i);
+                    break;
+                }
+                
             }
         }
+    }
+
+    private void UpdateMeshQueue(Vector3 coordinate, int lod)
+    {
+        //if they don't have a mesh, they're not empty, and they're meshable, add to mesh queue
+        var data = loadedChunkDictionary[coordinate];
+
+        if (data.currentLOD == lod)
+        {
+            return;
+        }
+        data.currentLOD = lod;
+
+        if (data.HasMesh())
+        {
+            data.UpdatePositionAndMesh();
+            return;
+        }
+            
+        if (!data.HasMesh() && !data.isEmpty && IsMeshable(coordinate))
+        { 
+            meshQueue.Enqueue(coordinate);
+        }
+        
     }
 
     private void UnloadChunks()

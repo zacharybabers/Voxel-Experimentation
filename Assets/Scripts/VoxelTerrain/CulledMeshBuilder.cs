@@ -144,7 +144,7 @@ public class CulledMeshBuilder : MonoBehaviour
         vertexData.Clear();
         triangleData.Clear();
         uvData.Clear();
-
+        
         int scrollNum = (int) Mathf.Pow(2, lodLevel);
         for (int i = 0; i < length; i+= scrollNum)
         {
