@@ -12,15 +12,27 @@ Additionally I'll be doing all of this from scratch w/ unity for rendering excep
 
 
 Feature Checklist:
+
 Voxel Rendering - done
+
 Atlas Based Texturing - done
+
 Different Block Types - done
+
 Terrain Generation w/ Noise - done but needs rework
+
 Biome Generation - wip
+
 Shrubbery/Tree Generation
+
 Water
+
 Grass
+
 Weather
+
 Infinite Chunk Streaming - done
+
 Village/Town Generation
+
 LOD Implementation - done
