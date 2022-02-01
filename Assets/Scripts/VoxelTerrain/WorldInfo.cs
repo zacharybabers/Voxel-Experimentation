@@ -210,8 +210,8 @@ public class WorldInfo : MonoBehaviour
                 if (chunksToLoad.Count > 0)
                 {
                     RefreshOneChunk();
-                    MeshOneChunk();
                 }
+                MeshOneChunk();
             }
         }
     }
