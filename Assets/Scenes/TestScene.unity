@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -434,9 +434,9 @@ MonoBehaviour:
   lodDistances:
   - 250
   - 550
-  - 800
-  - 801
-  - 802
+  - 582
+  - 614
+  - 646
 --- !u!4 &682102888
 Transform:
   m_ObjectHideFlags: 0
@@ -569,6 +569,7 @@ GameObject:
   - component: {fileID: 1495421055}
   - component: {fileID: 1495421056}
   - component: {fileID: 1495421057}
+  - component: {fileID: 1495421058}
   m_Layer: 0
   m_Name: Biome 1
   m_TagString: Untagged
@@ -590,11 +591,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Grassy Hills
   topBlock: 1
-  innerBlock: 2
+  innerBlock: 3
   additiveFastNoises:
   - {fileID: 1495421053}
+  - {fileID: 1495421058}
   weights:
-  - 1.7
+  - 3.2
+  - -0.5
   multiplicativeFastNoises:
   - {fileID: 1495421056}
   - {fileID: 1495421057}
@@ -602,8 +605,8 @@ MonoBehaviour:
   topLayerHeight: 5
   innerFastNoise: {fileID: 1495421055}
   innerBlockBaseLevel: 0
-  innerScale: 32
-  innerLayerAdditive: 0
+  innerScale: 10
+  innerLayerAdditive: 1
 --- !u!114 &1495421053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,7 +621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noiseName: Grassy Hills Upper Layer
   seed: 1337
-  frequency: 0.007
+  frequency: 0.004
   interp: 2
   noiseType: 4
   octaves: 6
@@ -664,7 +667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noiseName: Grassy Noise Inner Layer
   seed: 1337
-  frequency: 0.01
+  frequency: 0.13
   interp: 2
   noiseType: 4
   octaves: 3
@@ -731,6 +734,38 @@ MonoBehaviour:
   frequency: 0.002
   interp: 2
   noiseType: 5
+  octaves: 3
+  lacunarity: 2
+  gain: 0.5
+  fractalType: 0
+  cellularDistanceFunction: 0
+  cellularReturnType: 0
+  cellularNoiseLookup: {fileID: 0}
+  cellularDistanceIndex0: 0
+  cellularDistanceIndex1: 1
+  cellularJitter: 0.45
+  gradientPerturbAmp: 1
+  generalSettingsFold: 1
+  fractalSettingsFold: 0
+  cellularSettingsFold: 0
+  positionWarpSettingsFold: 0
+--- !u!114 &1495421058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495421051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4769e140e33119d42aff1561d9dd7ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseName: Experimental Negative
+  seed: 146
+  frequency: 0.01
+  interp: 2
+  noiseType: 4
   octaves: 3
   lacunarity: 2
   gain: 0.5
