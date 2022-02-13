@@ -9,10 +9,12 @@ public class TerrainChunk : MonoBehaviour
     public ChunkData chunkData;
     public Vector3 chunkCoord;
     public MeshFilter meshFilter;
+    public MeshCollider meshCollider;
 
     private void Awake()
     {
         meshFilter = gameObject.GetComponent<MeshFilter>();
+        meshCollider = gameObject.GetComponent<MeshCollider>();
     }
     
 }
@@ -24,6 +26,8 @@ public class ChunkData
     public Vector3 chunkCoord;
 
     public bool isEmpty;
+
+    public bool hasCollider;
 
     public int currentLOD;
     
@@ -97,7 +101,7 @@ public class ChunkData
         }
         UpdatePositionAndMesh();
     }
-
+    
     private void GetVoxelAtlas()
     {
         voxelAtlas = WorldInfo.terrainGenerator.GenerateChunkAtlas(chunkCoord);
@@ -113,6 +117,7 @@ public class ChunkData
         if (currentLOD != -1)
         {
             terrainChunk.meshFilter.mesh = chunkMeshes[currentLOD];
+            terrainChunk.meshCollider.sharedMesh = chunkMeshes[currentLOD];
         }
         terrainChunk.chunkCoord = chunkCoord;
         terrainChunk.gameObject.name = "chunk (" + chunkCoord.x + ", " + chunkCoord.y + ", " + chunkCoord.z + ")";

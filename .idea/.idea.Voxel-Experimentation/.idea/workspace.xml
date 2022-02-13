@@ -23,13 +23,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Chunk.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Settings/ForwardRenderer.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/ForwardRenderer.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,15 +58,15 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeRender.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/GroundDetection.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
       </list>
     </option>
   </component>
@@ -143,7 +144,7 @@
       <workItem from="1641643678428" duration="16500000" />
       <workItem from="1643076160302" duration="10399000" />
       <workItem from="1644130055321" duration="620000" />
-      <workItem from="1644617155774" duration="7432000" />
+      <workItem from="1644617155774" duration="12069000" />
     </task>
     <servers />
   </component>
@@ -173,14 +174,13 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="305" y="-24" width="1422" height="1027" maximized="true" key="dock-window-1/-1920.362.1920.1040/0.0.2560.1400@-1920.362.1920.1040" timestamp="1638256586606" />
-    <state x="-1855" y="362" width="1871" height="1127" key="dock-window-1/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1634956383533" />
     <state x="-1293" y="414" width="666" height="936" key="find.popup" timestamp="1636818829469">
       <screen x="-1920" y="362" width="1920" height="1040" />
     </state>
     <state x="-1293" y="414" width="666" height="936" key="find.popup/-1920.362.1920.1040/0.0.2560.1400@-1920.362.1920.1040" timestamp="1636818829469" />
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1639151516560">
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1644646326378">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1639151516560" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1644646326378" />
   </component>
 </project>
