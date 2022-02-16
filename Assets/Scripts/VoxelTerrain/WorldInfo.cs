@@ -19,6 +19,8 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private int worldLOD = 0;
 
     private static bool viewerNewChunkThisFrame;
+    private bool searchEnabled = false;
+    
     public const int chunkSize = 32;
 
     public static CulledMeshBuilder meshBuilder;
@@ -103,6 +105,7 @@ public class WorldInfo : MonoBehaviour
 
     private void FindInitialChunksToLoad()
     {
+
         chunksToLoad.Clear();
         
         var viewDistSquared = drawDistance * drawDistance;
@@ -153,6 +156,7 @@ public class WorldInfo : MonoBehaviour
             tempList.RemoveAt(index);
             chunksToLoad = new Queue<Vector3>(tempList);
         }
+        
         
     }
 
@@ -218,6 +222,7 @@ public class WorldInfo : MonoBehaviour
 
     private void UpdateLODNeeded()
     {
+
         var currentChunkX = transformChunk.x;
         var currentChunkY = transformChunk.y;
         var currentChunkZ = transformChunk.z;
@@ -238,6 +243,7 @@ public class WorldInfo : MonoBehaviour
                 
             }
         }
+        
     }
 
     private void UpdateMeshQueue(Vector3 coordinate, int lod)
@@ -267,6 +273,7 @@ public class WorldInfo : MonoBehaviour
 
     private void UnloadChunks()
     {
+
         var viewDistSquared = drawDistance * drawDistance;
 
         
@@ -298,6 +305,8 @@ public class WorldInfo : MonoBehaviour
             }
         }
         //take out of range chunks out of chunkstoload
+        
+      
         
     } 
 

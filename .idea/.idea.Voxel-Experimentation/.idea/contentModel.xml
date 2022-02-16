@@ -31,6 +31,7 @@
           <e p="Controller" t="Include">
             <e p="CharacterLooker.cs" t="Include" />
             <e p="CharacterMovement.cs" t="Include" />
+            <e p="FollowTarget.cs" t="Include" />
             <e p="GroundDetection.cs" t="Include" />
           </e>
           <e p="DictionTest.cs" t="Include" />
@@ -41,7 +42,6 @@
             <e p="CubeType.cs" t="Include" />
             <e p="CubeTypeDistributor.cs" t="Include" />
             <e p="CulledMeshBuilder.cs" t="Include" />
-            <e p="StaticCulledMeshBuilder.cs" t="Include" />
             <e p="TerrainChunk.cs" t="Include" />
             <e p="TerrainGenerator.cs" t="Include" />
             <e p="VoxelAtlas.cs" t="Include" />

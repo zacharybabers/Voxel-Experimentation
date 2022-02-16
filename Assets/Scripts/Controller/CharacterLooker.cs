@@ -9,6 +9,7 @@ public class CharacterLooker : MonoBehaviour
 
     [SerializeField] private GameObject mainCamera;
     [SerializeField] private GameObject aimCamera;
+   
 
     private float yRotation = 0f;
 
@@ -21,8 +22,15 @@ public class CharacterLooker : MonoBehaviour
     private void Update()
     {
         UpdateYRotation();
+        //RotateAlongX();
         CheckCamera();
-        
+    }
+    
+    private void RotateAlongX()
+    {
+        var mouseDelta = Input.GetAxis("Mouse X");
+        var mouseX = mouseDelta * mouseSensitivity * Time.deltaTime;
+        transform.Rotate(Vector3.up, mouseX);
     }
 
     private void UpdateYRotation()

@@ -16,14 +16,18 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float airborneOppositeMultiplier = 2f;
     [SerializeField] private float maxAirSpeed = 20f;
     [SerializeField] private float mouseSensitivity = 100f;
+    [SerializeField] private float stepRotation = 31.4f;
 
     public float gravity = -9.8f;
     public Vector3 velocity;
     public Vector3 groundMomentum;
+    public Vector3 lastNonZeroInput;
     
     public bool isGrounded;
     
     public CharacterController controller;
+    [SerializeField] private Transform mainCamera;
+    [SerializeField] private Transform lookTransform;
     
 
 
@@ -37,6 +41,7 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         Locomotion();
+        RotateToInput();
     }
 
     private void Locomotion()
@@ -80,7 +85,13 @@ public class CharacterMovement : MonoBehaviour
         var controlThrow = GetControlThrow();
 
         var transform1 = transform;
-        var controlMovement = transform1.right * controlThrow.x + transform1.forward * controlThrow.y;
+        var camRight = mainCamera.right;
+        camRight = new Vector3(camRight.x, 0, camRight.z).normalized;
+
+        var camForward = mainCamera.forward;
+        camForward = new Vector3(camForward.x, 0, camForward.z).normalized;
+        
+        var controlMovement = camRight * controlThrow.x + camForward * controlThrow.y;
         controlMovement = controlMovement.normalized;
         return controlMovement;
     }
@@ -155,7 +166,23 @@ public class CharacterMovement : MonoBehaviour
     {
         var mouseDelta = Input.GetAxis("Mouse X");
         var mouseX = mouseDelta * mouseSensitivity * Time.deltaTime;
-        transform.Rotate(Vector3.up, mouseX);
+        lookTransform.Rotate(Vector3.up, mouseX);
+    }
+
+    private void RotateToInput()
+    {
+        var controlMovement = GetControlMovement();
+        if (!controlMovement.Equals(Vector3.zero))
+        {
+            lastNonZeroInput = controlMovement;
+        }
+
+        Quaternion targetRotation = Quaternion.identity;
+        if (lastNonZeroInput != Vector3.zero) {
+             targetRotation = Quaternion.LookRotation(lastNonZeroInput, Vector3.up);
+        }
+        
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, stepRotation * Time.deltaTime);
     }
     
 
