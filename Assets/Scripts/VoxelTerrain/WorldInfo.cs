@@ -20,6 +20,11 @@ public class WorldInfo : MonoBehaviour
 
     private static bool viewerNewChunkThisFrame;
     private bool searchEnabled = false;
+    private int searchFrames = 0;
+    private int chunkSearchStep = 0;
+    [SerializeField] private int stepsPerFrame = 2;
+
+    private Vector3[] keyArray;   
     
     public const int chunkSize = 32;
 
@@ -198,51 +203,173 @@ public class WorldInfo : MonoBehaviour
             CreateTerrainChunk(loadedChunkDictionary[coordinate]);
         }
     }
+    
+    private void DoChunkSearch()
+    {
+
+        var viewDistSquared = drawDistance * drawDistance;
+        
+        var currentChunkX = transformChunk.x;
+        var currentChunkY = transformChunk.y;
+        var currentChunkZ = transformChunk.z;
+
+        var chunksInLinearDist = (int) drawDistance / chunkSize;
+
+        var finalSearchStep = chunkSearchStep += stepsPerFrame;
+
+        if (finalSearchStep >= currentChunkX + chunksInLinearDist)
+        {
+            finalSearchStep = currentChunkX + chunksInLinearDist;
+            searchEnabled = false;
+        }
+
+        //loop through x,y,z... if dist(player,(x,y,z)) < radius, do our check for coords being in dictionary, if not, add to chunksToLoad... this method would allow implementation of steps as well
+        for (int i = chunkSearchStep; i <= finalSearchStep; i++) //edit this loop in order to create steps, for example, per frame we only go through one x and repeat every set number of frames ( this would probably be done for y generally but no real difference )
+        {
+            chunkSearchStep++;
+            for (int j = currentChunkY - chunksInLinearDist; j <= currentChunkY + chunksInLinearDist; j++)
+            {
+                for (int k = currentChunkZ - chunksInLinearDist; k <= currentChunkZ + chunksInLinearDist; k++)
+                {
+                    if (!loadedChunkDictionary.ContainsKey(new Vector3(i, j, k)) && !chunksToLoad.Contains(new Vector3(i, j, k)))
+                    {
+                        var distSquared = Mathf.Pow((float) (i - currentChunkX) * chunkSize, 2) + Mathf.Pow((float) (j - currentChunkY) * chunkSize, 2) + Mathf.Pow((float) (k - currentChunkZ) * chunkSize, 2);
+                    
+                        if (distSquared < viewDistSquared && k > -4)
+                        {
+                            chunksToLoad.Enqueue(new Vector3(i, j, k));
+                        }
+                    }
+                }
+                
+            }
+        }
+        
+        var myChunk = new Vector3(currentChunkX, currentChunkY, 0);
+
+        if (chunksToLoad.Contains(myChunk) && chunksToLoad.Peek() != myChunk)
+        {
+            List<Vector3> tempList = new List<Vector3>();
+            tempList.Add(myChunk);
+            tempList.AddRange(chunksToLoad);
+            var index = 0;
+            for (var i = 1; i < tempList.Count; i++)
+            {
+                if (tempList[i].Equals(myChunk))
+                {
+                    index = i;
+                }
+            }
+
+            tempList.RemoveAt(index);
+            chunksToLoad = new Queue<Vector3>(tempList);
+        }
+        
+        
+    }
 
     private void UpdateChunks()
     {
         if (viewerNewChunkThisFrame)
         {
-            UpdateLODNeeded();
-            FindInitialChunksToLoad();
+            searchEnabled = true;
+            chunksToLoad.Clear();
+            meshQueue.Clear();
+
+            keyArray = loadedChunkDictionary.Keys.ToArray();
+
+            var chunksInLinearDist = (int) drawDistance / chunkSize;
+            chunkSearchStep = transformChunk.x - chunksInLinearDist;
+
+            searchFrames =  (2 * chunksInLinearDist) / stepsPerFrame;
+            if ((2 *chunksInLinearDist) % chunkSearchStep != 0)
+            {
+                searchFrames++;
+            }
+            
             UnloadChunks();
+            
+            keyArray = loadedChunkDictionary.Keys.ToArray();
         }
         else
         {
-            for (int i = 0; i < chunksPerFrame; i++)
+            if (searchEnabled)
             {
-                if (chunksToLoad.Count > 0)
+                DoChunkSearch();
+                if (!searchEnabled)
                 {
-                    RefreshOneChunk();
-                    MeshOneChunk();
+                    UpdateLODNeeded();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chunksPerFrame; i++)
+                {
+                    if (chunksToLoad.Count > 0)
+                    {
+                        RefreshOneChunk();
+                        MeshOneChunk();
+                    }
                 }
             }
         }
+
+        
     }
 
     private void UpdateLODNeeded()
     {
+        //var currentFrame = chunkSearchStep / stepsPerFrame;
 
+       // var frameRatio = keyArray.Length / searchFrames;
+        
         var currentChunkX = transformChunk.x;
         var currentChunkY = transformChunk.y;
         var currentChunkZ = transformChunk.z;
         
-        foreach (var coordinate in loadedChunkDictionary.Keys)
-        {
-            for (int i = 0; i < 5; i++)
+        //if (currentFrame < searchFrames - 1)
+        //{
+            for (int counter = 0; counter < keyArray.Length; counter++)
             {
-                var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
-                var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
-                                  Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
-                                  Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
-                if (distSquared < viewDistSquared)
+                var coordinate = keyArray[counter];
+            
+                for (int i = 0; i < 5; i++)
                 {
-                    UpdateMeshQueue(coordinate, i);
-                    break;
-                }
+                    var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                    var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
+                                      Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
+                                      Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
+                    if (distSquared < viewDistSquared)
+                    {
+                        UpdateMeshQueue(coordinate, i);
+                        break;
+                    }
                 
+                }
             }
-        }
+        //}
+        /*else
+        {
+            for (int counter = frameRatio * currentFrame; counter < keyArray.Length; counter++)
+            {
+                var coordinate = keyArray[counter];
+            
+                for (int i = 0; i < 5; i++)
+                {
+                    var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                    var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
+                                      Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
+                                      Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
+                    if (distSquared < viewDistSquared)
+                    {
+                        UpdateMeshQueue(coordinate, i);
+                        break;
+                    }
+                
+                }
+            }
+        }*/
+        
         
     }
 
@@ -276,34 +403,35 @@ public class WorldInfo : MonoBehaviour
 
         var viewDistSquared = drawDistance * drawDistance;
 
-        
         var currentChunkX = transformChunk.x;
         var currentChunkY = transformChunk.y;
         var currentChunkZ = transformChunk.z;
 
-        var chunkDatas = new ChunkData[loadedChunkDictionary.Count];
-        loadedChunkDictionary.Values.CopyTo(chunkDatas, 0);
 
-        for (int chunkNum = 0; chunkNum < loadedChunkDictionary.Count; chunkNum++)
-        {
-            //calculate view distance, check which chunks are outside of it, then add them to pool and unload them
-            var distSquared = Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.x - currentChunkX) * chunkSize, 2) +
-                              Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.y - currentChunkY) * chunkSize, 2) +
-                              Mathf.Pow((float) (chunkDatas[chunkNum].chunkCoord.z - currentChunkZ) * chunkSize, 2);
-            if (distSquared >= viewDistSquared)
+        
+            for (int chunkNum = 0; chunkNum < keyArray.Length; chunkNum++)
             {
-                var chunkData = chunkDatas[chunkNum];
-                unusedTerrainChunks.Add(chunkData.terrainChunk);
-                chunkData.UnloadTerrainChunk();
-                loadedChunkDictionary.Remove(chunkData.chunkCoord);
-                
-                chunkPool.Add(chunkData);
-                if (chunkPool.Count > chunkPoolSize)
+                var coord = keyArray[chunkNum];
+                //calculate view distance, check which chunks are outside of it, then add them to pool and unload them
+                var distSquared = Mathf.Pow((float) (coord.x - currentChunkX) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coord.y - currentChunkY) * chunkSize, 2) +
+                                  Mathf.Pow((float) (coord.z - currentChunkZ) * chunkSize, 2);
+                if (distSquared >= viewDistSquared)
                 {
-                    chunkPool.RemoveAt(0);
+                    var chunkData = loadedChunkDictionary[coord];
+                    unusedTerrainChunks.Add(chunkData.terrainChunk);
+                    chunkData.UnloadTerrainChunk();
+                    loadedChunkDictionary.Remove(chunkData.chunkCoord);
+                
+                    chunkPool.Add(chunkData);
+                    if (chunkPool.Count > chunkPoolSize)
+                    {
+                        chunkPool.RemoveAt(0);
+                    }
                 }
             }
-        }
+       
+        
         //take out of range chunks out of chunkstoload
         
       

@@ -23,16 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/CapsulePlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/CapsulePlayer.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MovementScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MovementScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene/PostProcessing Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene/PostProcessing Profile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +149,7 @@
       <workItem from="1644130055321" duration="620000" />
       <workItem from="1644617155774" duration="12661000" />
       <workItem from="1644817521539" duration="4641000" />
-      <workItem from="1644982938154" duration="897000" />
+      <workItem from="1644982938154" duration="11949000" />
     </task>
     <servers />
   </component>
@@ -191,9 +183,9 @@
       <screen x="-1920" y="362" width="1920" height="1040" />
     </state>
     <state x="-1293" y="414" width="666" height="936" key="find.popup/-1920.362.1920.1040/0.0.2560.1400@-1920.362.1920.1040" timestamp="1636818829469" />
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1644646326378">
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1644986283294">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1644646326378" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/-1920.362.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1644986283294" />
   </component>
 </project>
