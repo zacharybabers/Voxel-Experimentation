@@ -219,6 +219,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06e82d3584a3f204aaf44a0fe9697a41, type: 3}
+--- !u!4 &325153166 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 244648975911689866, guid: 06e82d3584a3f204aaf44a0fe9697a41, type: 3}
+  m_PrefabInstance: {fileID: 325153165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &581200783
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +384,7 @@ MonoBehaviour:
   worldLOD: 0
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
-  targetTransform: {fileID: 0}
+  targetTransform: {fileID: 325153166}
   lodDistances:
   - 250
   - 550
