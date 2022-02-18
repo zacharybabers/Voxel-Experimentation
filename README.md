@@ -19,6 +19,8 @@ Atlas Based Texturing - done
 
 Different Block Types - done
 
+Multithreading - wip
+
 Terrain Generation w/ Noise - done but needs rework
 
 Biome Generation - wip
