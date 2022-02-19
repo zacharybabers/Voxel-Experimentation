@@ -45,6 +45,10 @@ public class WorldInfo : MonoBehaviour
     {
         emptyAtlas = new int[chunkSize,chunkSize,chunkSize];
         drawDistance = lodDistances[4];
+        for(int i = 0; i < lodDistances.Length; i++)
+        {
+            lodDistances[i] = Mathf.Pow(lodDistances[i], 2f);
+        }
         InitCubeTypes();
         meshBuilder = gameObject.AddComponent<CulledMeshBuilder>();
         meshBuilder.InitMeshBuilder();
@@ -108,7 +112,7 @@ public class WorldInfo : MonoBehaviour
 
     private void FindInitialChunksToLoad()
     {
-
+        
         chunksToLoad.Clear();
         
         var viewDistSquared = drawDistance * drawDistance;
@@ -185,7 +189,7 @@ public class WorldInfo : MonoBehaviour
         {
             for (int i = 0; i < 5; i++)
             {
-                var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                var viewDistSquared = lodDistances[i];
                 var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
                                   Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
                                   Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
@@ -206,9 +210,61 @@ public class WorldInfo : MonoBehaviour
     {
         if (viewerNewChunkThisFrame)
         {
-            UpdateLODNeeded();
-            FindInitialChunksToLoad();
+            // UpdateLODNeeded();
+            // FindInitialChunksToLoad();
+
+            var timer = Time.realtimeSinceStartup;
+            
+            chunksToLoad.Clear();
+
+            var chunksInLinearDist = (int) drawDistance / chunkSize;
+            var arrayLength = (int) Mathf.Pow(2 * chunksInLinearDist, 3);
+
+            var distArray = new NativeArray<sbyte>(arrayLength, Allocator.TempJob);
+            var coordsArray = new NativeArray<float3>(arrayLength, Allocator.TempJob);
+            var viewDistArray = new NativeArray<float>(lodDistances.Length, Allocator.TempJob);
+            for (int i = 0; i < lodDistances.Length; i++)
+            {
+                viewDistArray[i] = lodDistances[i];
+            }
+
+            DistanceChecker distanceChecker = new DistanceChecker();
+            distanceChecker.dists = distArray;
+            distanceChecker.coords = coordsArray;
+            distanceChecker.viewDistsSquared = viewDistArray;
+            distanceChecker.chunksInLinearDist = chunksInLinearDist;
+            distanceChecker.playerChunk = (Vector3) transformChunk;
+
+            JobHandle distanceCheckerHandle = distanceChecker.Schedule(arrayLength, 20);
+            
+            distanceCheckerHandle.Complete();
+
+            for (int i = 0; i < arrayLength; i++)
+            {
+                var lodLevel = distArray[i];
+                
+                if (lodLevel != -1)
+                {
+                    Vector3 coordinate = coordsArray[i];
+                    if (loadedChunkDictionary.ContainsKey(coordinate))
+                    {
+                        UpdateMeshQueue(coordinate, lodLevel);
+                    }
+                    else
+                    {
+                        chunksToLoad.Enqueue(coordinate);
+                    }
+                }
+            }
+            
+            distanceChecker.dists.Dispose();
+            distanceChecker.coords.Dispose();
+            viewDistArray.Dispose();
+            
             UnloadChunks();
+            
+            Debug.Log("time taken: " + (Time.realtimeSinceStartup - timer) + ". chunkstoload count: " + chunksToLoad.Count);
+
         }
         else
         {
@@ -217,12 +273,10 @@ public class WorldInfo : MonoBehaviour
                 if (chunksToLoad.Count > 0)
                 {
                     RefreshOneChunk();
-                }
-
-                if (meshQueue.Count > 0)
-                {
                     MeshOneChunk();
                 }
+
+                
             }
         }
     }
@@ -238,7 +292,7 @@ public class WorldInfo : MonoBehaviour
         {
             for (int i = 0; i < 5; i++)
             {
-                var viewDistSquared = Mathf.Pow(lodDistances[i], 2);
+                var viewDistSquared = lodDistances[i];
                 var distSquared = Mathf.Pow((float) (coordinate.x - currentChunkX) * chunkSize, 2) +
                                   Mathf.Pow((float) (coordinate.y - currentChunkY) * chunkSize, 2) +
                                   Mathf.Pow((float) (coordinate.z - currentChunkZ) * chunkSize, 2);
@@ -457,11 +511,13 @@ public class WorldInfo : MonoBehaviour
     //todo add support for partially reinitializing world if the current chunk is not adjacent to last frames chunk... aka teleportation (currently this glitches things out)
 }
 
+[BurstCompile(CompileSynchronously = true)]
 public struct DistanceChecker : IJobParallelFor
 {
-    public NativeArray<SByte> dists;
+    [NativeDisableParallelForRestriction] public NativeArray<SByte> dists;
+    [NativeDisableParallelForRestriction] public NativeArray<float3> coords;
 
-    public NativeArray<float> viewDistsSquared;
+    [NativeDisableParallelForRestriction] public NativeArray<float> viewDistsSquared;
 
     public float3 playerChunk;
     public int chunksInLinearDist;
@@ -475,6 +531,8 @@ public struct DistanceChecker : IJobParallelFor
         baseCoord.x += playerChunk.x - chunksInLinearDist;
         baseCoord.y += playerChunk.y - chunksInLinearDist;
         baseCoord.z += playerChunk.z - chunksInLinearDist;
+
+        coords[index] = baseCoord;
         
         //check if basecoord within distance of playerchunk
 
