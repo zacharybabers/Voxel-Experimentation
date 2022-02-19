@@ -28,6 +28,9 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="Auxiliary" t="Include">
+            <e p="Operations.cs" t="Include" />
+          </e>
           <e p="Controller" t="Include">
             <e p="CharacterLooker.cs" t="Include" />
             <e p="CharacterMovement.cs" t="Include" />

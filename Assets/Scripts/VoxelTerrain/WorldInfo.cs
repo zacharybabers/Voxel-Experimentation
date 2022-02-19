@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using Unity.Mathematics;
+using Unity.Jobs;
+using Unity.Burst;
+using Unity.Collections;
 
 public class WorldInfo : MonoBehaviour
 {
@@ -19,8 +23,7 @@ public class WorldInfo : MonoBehaviour
     [SerializeField] private int worldLOD = 0;
 
     private static bool viewerNewChunkThisFrame;
-    private bool searchEnabled = false;
-    
+
     public const int chunkSize = 32;
 
     public static CulledMeshBuilder meshBuilder;
@@ -214,6 +217,10 @@ public class WorldInfo : MonoBehaviour
                 if (chunksToLoad.Count > 0)
                 {
                     RefreshOneChunk();
+                }
+
+                if (meshQueue.Count > 0)
+                {
                     MeshOneChunk();
                 }
             }
@@ -448,5 +455,43 @@ public class WorldInfo : MonoBehaviour
     }
     
     //todo add support for partially reinitializing world if the current chunk is not adjacent to last frames chunk... aka teleportation (currently this glitches things out)
+}
+
+public struct DistanceChecker : IJobParallelFor
+{
+    public NativeArray<SByte> dists;
+
+    public NativeArray<float> viewDistsSquared;
+
+    public float3 playerChunk;
+    public int chunksInLinearDist;
+    
+    public void Execute(int index)
+    {
+        int doubleDist = 2 * chunksInLinearDist;
+        
+        int3 intCoord = Operations.GetIndex3(doubleDist, doubleDist, doubleDist, index);
+        float3 baseCoord = new float3((float) intCoord.x, (float) intCoord.y, (float) intCoord.z);
+        baseCoord.x += playerChunk.x - chunksInLinearDist;
+        baseCoord.y += playerChunk.y - chunksInLinearDist;
+        baseCoord.z += playerChunk.z - chunksInLinearDist;
+        
+        //check if basecoord within distance of playerchunk
+
+        var distSquared = Mathf.Pow((baseCoord.x - playerChunk.x) * 32f, 2f) +
+                          Mathf.Pow((baseCoord.y - playerChunk.y) * 32f, 2f) +
+                          Mathf.Pow((baseCoord.z - playerChunk.z) * 32f, 2f);
+
+        dists[index] = -1;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (distSquared < viewDistsSquared[i])
+            {
+                dists[index] = (sbyte) i;
+                break;
+            }
+        }
+    }
 }
 

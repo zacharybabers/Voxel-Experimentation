@@ -25,14 +25,7 @@
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/CapsulePlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/CapsulePlayer.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MovementScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MovementScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScene/PostProcessing Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScene/PostProcessing Profile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +36,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Auxiliary/Operations.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" root0="FORCE_HIGHLIGHTING" />
@@ -61,7 +55,6 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/GroundDetection.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
@@ -69,6 +62,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/FollowTarget.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Auxiliary/Operations.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
       </list>
     </option>
@@ -158,6 +153,7 @@
       <workItem from="1644617155774" duration="12661000" />
       <workItem from="1644817521539" duration="4641000" />
       <workItem from="1644982938154" duration="897000" />
+      <workItem from="1645236240197" duration="2752000" />
     </task>
     <servers />
   </component>
