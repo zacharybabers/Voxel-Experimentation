@@ -250,7 +250,7 @@ public class WorldInfo : MonoBehaviour
                     {
                         UpdateMeshQueue(coordinate, lodLevel);
                     }
-                    else if(coordinate.z > -2 && coordinate.z < 4 && !chunksToLoad.Contains(coordinate))
+                    else if(coordinate.z > -2 && !chunksToLoad.Contains(coordinate))
                     {
                         chunksToLoad.Enqueue(coordinate);
                     }

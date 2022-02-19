@@ -386,11 +386,11 @@ MonoBehaviour:
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
   targetTransform: {fileID: 325153166}
   lodDistances:
-  - 250
+  - 500
   - 550
-  - 582
-  - 614
-  - 646
+  - 590
+  - 622
+  - 654
 --- !u!4 &682102888
 Transform:
   m_ObjectHideFlags: 0
@@ -421,7 +421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   biomes:
   - {fileID: 1495421052}
-  textureCols: 9
+  textureCols: 4
   textureRows: 1
   xTexInset: 0.04
   yTexInset: 0.04
@@ -472,9 +472,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Stone
   blockID: 3
-  topTexture: {x: 6, y: 0}
-  sideTexture: {x: 7, y: 0}
-  bottomTexture: {x: 8, y: 0}
+  topTexture: {x: 0, y: 0}
+  sideTexture: {x: 0, y: 0}
+  bottomTexture: {x: 0, y: 0}
 --- !u!114 &1395786705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,9 +489,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Grass Dirt
   blockID: 1
-  topTexture: {x: 0, y: 0}
-  sideTexture: {x: 1, y: 0}
-  bottomTexture: {x: 2, y: 0}
+  topTexture: {x: 2, y: 0}
+  sideTexture: {x: 0, y: 0}
+  bottomTexture: {x: 0, y: 0}
 --- !u!114 &1395786706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,9 +506,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Sand
   blockID: 2
-  topTexture: {x: 3, y: 0}
-  sideTexture: {x: 4, y: 0}
-  bottomTexture: {x: 5, y: 0}
+  topTexture: {x: 0, y: 0}
+  sideTexture: {x: 0, y: 0}
+  bottomTexture: {x: 0, y: 0}
 --- !u!1 &1495421051
 GameObject:
   m_ObjectHideFlags: 0
