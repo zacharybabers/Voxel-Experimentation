@@ -250,7 +250,7 @@ public class WorldInfo : MonoBehaviour
                     {
                         UpdateMeshQueue(coordinate, lodLevel);
                     }
-                    else
+                    else if(coordinate.z > -4 && !chunksToLoad.Contains(coordinate))
                     {
                         chunksToLoad.Enqueue(coordinate);
                     }
@@ -263,7 +263,7 @@ public class WorldInfo : MonoBehaviour
             
             UnloadChunks();
             
-            Debug.Log("time taken: " + (Time.realtimeSinceStartup - timer) + ". chunkstoload count: " + chunksToLoad.Count);
+            //Debug.Log("time taken: " + (Time.realtimeSinceStartup - timer) + ". chunkstoload count: " + chunksToLoad.Count);
 
         }
         else
