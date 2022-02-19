@@ -380,7 +380,7 @@ MonoBehaviour:
   unusedTerrainChunks: []
   chunkPoolSize: 9
   nonLoadedChunkSize: 900
-  chunksPerFrame: 5
+  chunksPerFrame: 10
   worldLOD: 0
   chunkParent: {fileID: 581200784}
   chunkPrefab: {fileID: 56135326663347030, guid: d7af96ab7a532a340995218cef6d62c3, type: 3}
