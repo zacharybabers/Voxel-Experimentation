@@ -26,9 +26,7 @@ public class ChunkData
     public Vector3 chunkCoord;
 
     public bool isEmpty;
-
-    public bool hasCollider;
-
+    
     public int currentLOD;
     
     private Mesh[] chunkMeshes;
@@ -43,6 +41,15 @@ public class ChunkData
         GetVoxelAtlas();
         isEmpty = IsEmpty();
         chunkMeshes = new Mesh[5];
+        currentLOD = -1;
+    }
+
+    public void Refresh(Vector3 chunkCoord)
+    {
+        this.chunkCoord = chunkCoord;
+        GetVoxelAtlas();
+        isEmpty = IsEmpty();
+        ClearChunkMeshes();
         currentLOD = -1;
     }
 
@@ -163,6 +170,14 @@ public class ChunkData
         }
 
         return true;
+    }
+
+    private void ClearChunkMeshes()
+    {
+        for (int i = 0; i < chunkMeshes.Length; i++)
+        {
+            chunkMeshes[i] = null;
+        }
     }
     
     
