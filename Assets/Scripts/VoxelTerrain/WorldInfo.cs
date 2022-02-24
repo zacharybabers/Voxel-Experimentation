@@ -27,7 +27,7 @@ public class WorldInfo : MonoBehaviour
 
     public static CulledMeshBuilder meshBuilder;
     public static TerrainGenerator terrainGenerator;
-    public static int[,,] emptyAtlas;
+    public static byte[,,] emptyAtlas;
 
     [SerializeField] private Transform chunkParent;
     [SerializeField] private GameObject chunkPrefab;
@@ -42,7 +42,7 @@ public class WorldInfo : MonoBehaviour
 
     private void Awake()
     {
-        emptyAtlas = new int[chunkSize,chunkSize,chunkSize];
+        emptyAtlas = new byte[chunkSize,chunkSize,chunkSize];
         drawDistance = lodDistances[4];
         for(int i = 0; i < lodDistances.Length; i++)
         {

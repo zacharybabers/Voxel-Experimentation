@@ -104,12 +104,12 @@ public class Biome : MonoBehaviour
     
     //private int[,,] Process3DNoise //go through 3d noise functions w given thresholds and turn blocks to air for caves, or do reverse for overhangs and things
 
-    public int[,,] GenerateChunkAtlas(Vector3 chunkCoord)
+    public byte[,,] GenerateChunkAtlas(Vector3 chunkCoord)
     {
         var heightMap = GenerateHeightMap(chunkCoord);
         var innerHeightMap = GenerateInnerHeightMap(chunkCoord);
 
-        var chunkAtlas = new int[WorldInfo.chunkSize, WorldInfo.chunkSize, WorldInfo.chunkSize];
+        var chunkAtlas = new byte[WorldInfo.chunkSize, WorldInfo.chunkSize, WorldInfo.chunkSize];
 
         for (int i = 0; i < WorldInfo.chunkSize; i++)
         {
@@ -121,22 +121,22 @@ public class Biome : MonoBehaviour
 
                     if (thisGlobalHeight <= heightMap[i, j] - topLayerHeight)
                     {
-                        chunkAtlas[i, j, k] = innerBlock;
+                        chunkAtlas[i, j, k] = (byte)innerBlock;
                     }
                     else if (thisGlobalHeight <= heightMap[i, j])
                     {
-                        chunkAtlas[i, j, k] = topBlock;
+                        chunkAtlas[i, j, k] = (byte)topBlock;
                     }
 
                     if (thisGlobalHeight <= innerHeightMap[i, j])
                     {
                         if (innerLayerAdditive)
                         {
-                            chunkAtlas[i, j, k] = innerBlock;
+                            chunkAtlas[i, j, k] = (byte) innerBlock;
                         }
                         else if (chunkAtlas[i, j, k] == topBlock)
                         {
-                            chunkAtlas[i, j, k] = innerBlock;
+                            chunkAtlas[i, j, k] = (byte)innerBlock;
                         }
                     }
                 }

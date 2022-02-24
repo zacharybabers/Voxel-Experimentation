@@ -36,12 +36,12 @@ public class CulledMeshBuilder : MonoBehaviour
         
     }
 
-    public Mesh Build(ChunkData chunkData, ref int[,,] topChunk, ref int[,,] bottomChunk, ref int[,,] leftChunk,
-        ref int[,,] rightChunk, ref int[,,] forwardChunk, ref int[,,] backChunk)
+    public Mesh Build(ChunkData chunkData, ref byte[,,] topChunk, ref byte[,,] bottomChunk, ref byte[,,] leftChunk,
+        ref byte[,,] rightChunk, ref byte[,,] forwardChunk, ref byte[,,] backChunk)
     {
         //timer = Time.realtimeSinceStartup;
         
-        int[,,] chunkArray = chunkData.voxelAtlas;
+        byte[,,] chunkArray = chunkData.voxelAtlas;
 
         length = chunkArray.GetLength(0);
         width = chunkArray.GetLength(1);
@@ -91,8 +91,8 @@ public class CulledMeshBuilder : MonoBehaviour
         return mesh;
     }
 
-    private void CreateQuads(int lodLevel, int[,,] chunkArray, int i, int j, int k, ref int[,,] topChunk, ref int[,,] bottomChunk, ref int[,,] leftChunk,
-        ref int[,,] rightChunk, ref int[,,] forwardChunk, ref int[,,] backChunk)
+    private void CreateQuads(int lodLevel, byte[,,] chunkArray, int i, int j, int k, ref byte[,,] topChunk, ref byte[,,] bottomChunk, ref byte[,,] leftChunk,
+        ref byte[,,] rightChunk, ref byte[,,] forwardChunk, ref byte[,,] backChunk)
     {
         int value = chunkArray[i, j, k];
         int scrollFactor = (int) Mathf.Pow(2, lodLevel);
@@ -128,12 +128,12 @@ public class CulledMeshBuilder : MonoBehaviour
         }       
     }
 
-    public Mesh BuildLOD(int lodLevel, ChunkData chunkData, ref int[,,] topChunk, ref int[,,] bottomChunk, ref int[,,] leftChunk,
-        ref int[,,] rightChunk, ref int[,,] forwardChunk, ref int[,,] backChunk)
+    public Mesh BuildLOD(int lodLevel, ChunkData chunkData, ref byte[,,] topChunk, ref byte[,,] bottomChunk, ref byte[,,] leftChunk,
+        ref byte[,,] rightChunk, ref byte[,,] forwardChunk, ref byte[,,] backChunk)
     {
         //timer = Time.realtimeSinceStartup;
         
-        int[,,] chunkArray = chunkData.voxelAtlas;
+        byte[,,] chunkArray = chunkData.voxelAtlas;
 
         length = chunkArray.GetLength(0);
         width = chunkArray.GetLength(1);

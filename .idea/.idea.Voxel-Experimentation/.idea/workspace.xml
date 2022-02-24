@@ -24,7 +24,10 @@
   <component name="ChangeListManager">
     <list default="true" id="84f27119-0fdb-49a6-bebb-31bbb1f16884" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Voxel-Experimentation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,16 +58,16 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/VoxelMeshFromHeightMap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DictionTest.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CubeType.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/GroundDetection.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterLooker.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/FollowTarget.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Controller/CharacterMovement.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Auxiliary/Operations.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainChunk.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/WorldInfo.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/CulledMeshBuilder.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/TerrainGenerator.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/VoxelTerrain/Biome.cs" />
       </list>
     </option>
   </component>
@@ -155,7 +158,7 @@
       <workItem from="1644982938154" duration="897000" />
       <workItem from="1645236240197" duration="9367000" />
       <workItem from="1645502014990" duration="604000" />
-      <workItem from="1645645278084" duration="2299000" />
+      <workItem from="1645645278084" duration="3073000" />
     </task>
     <servers />
   </component>

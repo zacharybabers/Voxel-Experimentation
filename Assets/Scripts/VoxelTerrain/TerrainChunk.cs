@@ -31,7 +31,7 @@ public class ChunkData
     
     private Mesh[] chunkMeshes;
     
-    public int[,,] voxelAtlas;
+    public byte[,,] voxelAtlas;
 
     public TerrainChunk terrainChunk;
 

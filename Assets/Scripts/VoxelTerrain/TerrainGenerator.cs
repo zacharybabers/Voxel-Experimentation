@@ -57,7 +57,7 @@ public class TerrainGenerator : MonoBehaviour
         return new QuadUVs(new Vector2(left, top), new Vector2(right, bottom), new Vector2(left, bottom), new Vector2(right, top));
     }
 
-    public int[,,] GenerateChunkAtlas(Vector3 chunkCoord)
+    public byte[,,] GenerateChunkAtlas(Vector3 chunkCoord)
     {
         return biomes[0].GenerateChunkAtlas(chunkCoord);
     }
